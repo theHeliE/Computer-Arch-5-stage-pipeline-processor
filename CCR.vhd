@@ -1,12 +1,14 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
 entity CCR is
     port (
         reset : in std_logic;
-        alu_res : in std_logic_vector(31 downto 0);
-        alu_op1:in std_logic_vector(31 downto 0);
-        alu_op2:in std_logic_vector(31 downto 0);
+        alu_res : in signed(31 downto 0);
+        alu_op1:in signed(31 downto 0);
+        alu_op2:in signed(31 downto 0);
+        alu_carry: in std_logic;
         zero_flag : out std_logic;
         carry_flag : out std_logic;
         overflow_flag : out std_logic;
@@ -20,17 +22,18 @@ port (
 A,B :IN std_logic_vector(n-1 DOWNTO 0);
 Cin:in std_logic;
 F: OUT std_logic_vector (n-1 DOWNTO 0);
-Cout: out std_logic;
+Cout: out std_logic
+);
 end component;
     signal zero_flag_internal : std_logic;
     signal carry_flag_internal : std_logic;
     signal overflow_flag_internal : std_logic;
     signal negative_flag_internal : std_logic;
     signal TestAdd:std_logic_vector(31 downto 0);
-    signal TestCarry:std_logic_vector(31 downto 0);
+    signal TestCarry:std_logic;
 begin
-    adds: thirtytwobitadder(alu_op1,alu_op2,'0',TestAdd,TestCarry);
-    process (reset,alu_res,alu_op1,alu_op2)
+    adds: thirtytwobitadder port map (std_logic_vector(alu_op1), std_logic_vector(alu_op2), '0', TestAdd, TestCarry);
+    process (reset, alu_res, alu_op1, alu_op2)
     begin
         if reset = '1' then
             zero_flag_internal <= '0';
@@ -38,23 +41,19 @@ begin
             overflow_flag_internal <= '0';
             negative_flag_internal <= '0';
         else
-          if alu_res="00000000000000000000000000000000" then
-            zero_flag_internal<='1';
-           else
-             zero_flag_internal<='0';
-            end if;
-           --if alu_res(32)='1' then 
-            --carry_flag_internal <='1';
-            --else
-            carry_flag_internal<='0';
-            --end if;
-            if ((alu_res(31) xor alu_res(30)) = '1') OR (alu_res(31) /= alu_res(30)) then
-            overflow_flag_internal <= '1';
+            if alu_res="00000000000000000000000000000000" then
+                zero_flag_internal<='1';
             else
-            overflow_flag_internal <= '0';
+                zero_flag_internal<='0';
+            end if;
+            carry_flag_internal<=alu_carry;
+            if ((alu_res(31) xor alu_res(30)) = '1') OR (alu_res(31) /= alu_res(30)) then
+                overflow_flag_internal <= '1';
+            else
+                overflow_flag_internal <= '0';
             end if;
             negative_flag_internal<=alu_res(31);
-    end if;
+        end if;
     end process;
 
     zero_flag <= zero_flag_internal;
