@@ -7,15 +7,19 @@ entity ALU is
         A : in  signed(31 downto 0);
         B : in  signed(31 downto 0);
         sel : in  std_logic_vector(3 downto 0);
-        Output : out signed(31 downto 0);
-        carry: out std_logic
+        alu_output : out signed(31 downto 0);
+        carry: out std_logic;
+        zero: out std_logic;
+        overflow: out std_logic;
+        negative: out std_logic
     );
 end entity ALU;
 
 architecture Behavioral of ALU is
+    signal alu_output_int : signed(31 downto 0);
 begin
     with sel select
-        Output <=
+    alu_output_int <=
             A or B when "0000",
             not A when "0001",
             A - B when "0010",
@@ -27,5 +31,9 @@ begin
         carry <= '1' when (sel="0110" and ((A >= 0 and B > to_signed(2147483647, 32) - A) or
             (B >= 0 and A > to_signed(2147483647, 32) - B))) or
             (sel="0010" and unsigned(A) < unsigned(B)) else '0';
+        zero <= '1' when alu_output_int = "00000000000000000000000000000000" else '0';
+        overflow <= '1' when ((A(31) = B(31)) and (A(31) /= alu_output_int(31))) else '0';       
+        negative <= alu_output_int(31);
+        alu_output <= alu_output_int;
 end architecture Behavioral;
 

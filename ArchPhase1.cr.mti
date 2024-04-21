@@ -6,7 +6,7 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity DecodeExecute
 -- Compiling architecture decExecRegMain of DecodeExecute
 
-} {} {}} D:/PROJECTS/ArchPhase1/Execute.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\Execute.vhd}
+} {} {}} D:/PROJECTS/ArchPhase1/Execute.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/Execute.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -41,7 +41,7 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity controller
 -- Compiling architecture controllerMain of controller
 
-} {} {}} D:/PROJECTS/ArchPhase1/ALU_CCR_Integeration.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/ALU_CCR_Integeration.vhd
+} {} {}} D:/PROJECTS/ArchPhase1/ALU_CCR_Integeration.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd}
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO

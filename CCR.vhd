@@ -9,6 +9,9 @@ entity CCR is
         alu_op1:in signed(31 downto 0);
         alu_op2:in signed(31 downto 0);
         alu_carry: in std_logic;
+        alu_zero: in std_logic;
+        alu_overflow: in std_logic;
+        alu_negative: in std_logic;
         zero_flag : out std_logic;
         carry_flag : out std_logic;
         overflow_flag : out std_logic;
@@ -41,18 +44,10 @@ begin
             overflow_flag_internal <= '0';
             negative_flag_internal <= '0';
         else
-            if alu_res="00000000000000000000000000000000" then
-                zero_flag_internal<='1';
-            else
-                zero_flag_internal<='0';
-            end if;
+            zero_flag_internal<= alu_zero;
             carry_flag_internal<=alu_carry;
-            if ((alu_res(31) xor alu_res(30)) = '1') OR (alu_res(31) /= alu_res(30)) then
-                overflow_flag_internal <= '1';
-            else
-                overflow_flag_internal <= '0';
-            end if;
-            negative_flag_internal<=alu_res(31);
+            overflow_flag_internal <= alu_overflow;
+            negative_flag_internal<=alu_negative;
         end if;
     end process;
 
