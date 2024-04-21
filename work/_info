@@ -9,7 +9,7 @@ z2
 cModel Technology
 dD:/ModelSim
 Ealu
-Z0 w1713731402
+Z0 w1713732464
 Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
@@ -22,9 +22,9 @@ VXdOEO0<jcDlb[CX=@5lPG0
 !s100 mP=A]Y[Hka6z5Ge2TDgbM3
 Z7 OV;C;10.5b;63
 32
-Z8 !s110 1713731409
+Z8 !s110 1713732818
 !i10b 1
-Z9 !s108 1713731409.000000
+Z9 !s108 1713732817.000000
 Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\ALU.vhd|
 Z11 !s107 D:\PROJECTS\ArchPhase1\ALU.vhd|
 !i113 1
@@ -37,8 +37,8 @@ R3
 Z14 DEx4 work 3 alu 0 22 XdOEO0<jcDlb[CX=@5lPG0
 l20
 L18
-V4UEbKT5QU7Cj11G[`RTRD1
-!s100 1Y<JV`1lV>=]JP91HJnbY1
+Z15 Va1OiEWH`K^CAJ]AdHOEIX1
+Z16 !s100 _F=1`3n1SWU8=1^oM7Jdd1
 R7
 32
 R8
@@ -50,24 +50,24 @@ R11
 R12
 R13
 Ealu_ccr_integeration
-Z15 w1713730029
+Z17 w1713730029
 R1
 R2
 R3
 R4
-Z16 8D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd
-Z17 FD:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd
+Z18 8D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd
+Z19 FD:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd
 l0
 L5
 VjCH:d[4Q:4cOzeWbagHUL1
 !s100 oNjf6W7Jlb[nPX_ZkF`@i3
 R7
 32
-Z18 !s110 1713730888
+Z20 !s110 1713730888
 !i10b 1
-Z19 !s108 1713730888.000000
-Z20 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd|
-Z21 !s107 D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd|
+Z21 !s108 1713730888.000000
+Z22 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd|
+Z23 !s107 D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd|
 !i113 1
 R12
 R13
@@ -82,33 +82,33 @@ V=MB<Q1elYQe_B]PXSK@HX3
 !s100 i5[AEcTS5UZ0<>I6WQ=Zd0
 R7
 32
-R18
-!i10b 1
-R19
 R20
+!i10b 1
 R21
+R22
+R23
 !i113 1
 R12
 R13
 Eccr
-Z22 w1713729703
+Z24 w1713729703
 R1
 R2
 R3
 R4
-Z23 8D:\PROJECTS\ArchPhase1\CCR.vhd
-Z24 FD:\PROJECTS\ArchPhase1\CCR.vhd
+Z25 8D:\PROJECTS\ArchPhase1\CCR.vhd
+Z26 FD:\PROJECTS\ArchPhase1\CCR.vhd
 l0
 L5
 VEP=N=hi?[AEX;?i2D3TGB1
 !s100 >3HJM18fCM2LgkQ?gmPmY3
 R7
 32
-Z25 !s110 1713729876
+Z27 !s110 1713729876
 !i10b 1
-Z26 !s108 1713729876.000000
-Z27 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\CCR.vhd|
-Z28 !s107 D:\PROJECTS\ArchPhase1\CCR.vhd|
+Z28 !s108 1713729876.000000
+Z29 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\CCR.vhd|
+Z30 !s107 D:\PROJECTS\ArchPhase1\CCR.vhd|
 !i113 1
 R12
 R13
@@ -123,33 +123,33 @@ V0CzZl:5W9nOe=bS^GM>?;1
 !s100 kfQFz3h4VY@2SJ8YS1[<01
 R7
 32
-R25
-!i10b 1
-R26
 R27
+!i10b 1
 R28
+R29
+R30
 !i113 1
 R12
 R13
 Econtroller
-Z29 w1713535676
+Z31 w1713535676
 R1
 R2
 R3
 R4
-Z30 8D:\PROJECTS\ArchPhase1\Controller.vhd
-Z31 FD:\PROJECTS\ArchPhase1\Controller.vhd
+Z32 8D:\PROJECTS\ArchPhase1\Controller.vhd
+Z33 FD:\PROJECTS\ArchPhase1\Controller.vhd
 l0
 L5
 VTAN0:nXE:9Ydfmf^ibD3@0
 !s100 C`ZeI2CC:oHYTzjYn96X42
 R7
 32
-Z32 !s110 1713729462
+Z34 !s110 1713729462
 !i10b 1
-Z33 !s108 1713729462.000000
-Z34 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\Controller.vhd|
-Z35 !s107 D:\PROJECTS\ArchPhase1\Controller.vhd|
+Z35 !s108 1713729462.000000
+Z36 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\Controller.vhd|
+Z37 !s107 D:\PROJECTS\ArchPhase1\Controller.vhd|
 !i113 1
 R12
 R13
@@ -164,32 +164,32 @@ VVjaK92GP;AJelNTiWlamQ3
 !s100 8[o18W66I6gUBJ^<dW<TN1
 R7
 32
-R32
-!i10b 1
-R33
 R34
+!i10b 1
 R35
+R36
+R37
 !i113 1
 R12
 R13
 Edecodeexecute
-R29
+R31
 R2
 R3
 R4
-Z36 8D:\PROJECTS\ArchPhase1\DecodeExecute.vhd
-Z37 FD:\PROJECTS\ArchPhase1\DecodeExecute.vhd
+Z38 8D:\PROJECTS\ArchPhase1\DecodeExecute.vhd
+Z39 FD:\PROJECTS\ArchPhase1\DecodeExecute.vhd
 l0
 L4
 Vc7l?FWOHG80No3Y]k2Qcd3
 !s100 S:Rcg]808KBIcX8ffZk]X2
 R7
 32
-R32
+R34
 !i10b 1
-R33
-Z38 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\DecodeExecute.vhd|
-Z39 !s107 D:\PROJECTS\ArchPhase1\DecodeExecute.vhd|
+R35
+Z40 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\DecodeExecute.vhd|
+Z41 !s107 D:\PROJECTS\ArchPhase1\DecodeExecute.vhd|
 !i113 1
 R12
 R13
@@ -203,33 +203,33 @@ V8A@o2ni8@WYdWHFT1heNJ3
 !s100 bl_ZbA]I5=kIDLCc:jLgf3
 R7
 32
-R32
+R34
 !i10b 1
-R33
-R38
-R39
+R35
+R40
+R41
 !i113 1
 R12
 R13
 Eexecute
-R29
+R31
 R1
 R2
 R3
 R4
-Z40 8D:/PROJECTS/ArchPhase1/Execute.vhd
-Z41 FD:/PROJECTS/ArchPhase1/Execute.vhd
+Z42 8D:/PROJECTS/ArchPhase1/Execute.vhd
+Z43 FD:/PROJECTS/ArchPhase1/Execute.vhd
 l0
 L4
 V6R2gHX6N^]UC>_4OUm[RM0
 !s100 ;1C@g]Sk5oc]ziQQ`^kHm1
 R7
 32
-Z42 !s110 1713729461
+Z44 !s110 1713729461
 !i10b 1
-Z43 !s108 1713729461.000000
-Z44 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/PROJECTS/ArchPhase1/Execute.vhd|
-Z45 !s107 D:/PROJECTS/ArchPhase1/Execute.vhd|
+Z45 !s108 1713729461.000000
+Z46 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/PROJECTS/ArchPhase1/Execute.vhd|
+Z47 !s107 D:/PROJECTS/ArchPhase1/Execute.vhd|
 !i113 1
 R12
 R13
@@ -244,32 +244,32 @@ VPWEDg?c1fza2Y5Wa6hDU31
 !s100 dX=_P0N2C@fHB[R[Dd_Pf0
 R7
 32
-R42
-!i10b 1
-R43
 R44
+!i10b 1
 R45
+R46
+R47
 !i113 1
 R12
 R13
 Emy_adder
-Z46 w1713551846
+Z48 w1713551846
 R2
 R3
 R4
-Z47 8D:/PROJECTS/ArchPhase1/my_adder.vhd
-Z48 FD:/PROJECTS/ArchPhase1/my_adder.vhd
+Z49 8D:/PROJECTS/ArchPhase1/my_adder.vhd
+Z50 FD:/PROJECTS/ArchPhase1/my_adder.vhd
 l0
 L4
 VFjlMaf=9aFlNWPMnMXH?k3
 !s100 A5lJZfMh@V_I]hj`4ZSML1
 R7
 32
-Z49 !s110 1713729463
+Z51 !s110 1713729463
 !i10b 1
-Z50 !s108 1713729463.000000
-Z51 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/PROJECTS/ArchPhase1/my_adder.vhd|
-Z52 !s107 D:/PROJECTS/ArchPhase1/my_adder.vhd|
+Z52 !s108 1713729463.000000
+Z53 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/PROJECTS/ArchPhase1/my_adder.vhd|
+Z54 !s107 D:/PROJECTS/ArchPhase1/my_adder.vhd|
 !i113 1
 R12
 R13
@@ -283,32 +283,32 @@ VEOP9;;8K^;kWb:D@aED0N1
 !s100 GNi^[i0bJH4Ed:4A3E4hd2
 R7
 32
-R49
-!i10b 1
-R50
 R51
+!i10b 1
 R52
+R53
+R54
 !i113 1
 R12
 R13
 Emy_nadder
-Z53 w1713551596
+Z55 w1713551596
 R2
 R3
 R4
-Z54 8D:\PROJECTS\ArchPhase1\mynadder.vhd
-Z55 FD:\PROJECTS\ArchPhase1\mynadder.vhd
+Z56 8D:\PROJECTS\ArchPhase1\mynadder.vhd
+Z57 FD:\PROJECTS\ArchPhase1\mynadder.vhd
 l0
 L4
 V2Uii>7o^mZ>R5ZU2g4=kQ0
 !s100 EJ>g3>J^lMeIZMoTW=Y6=1
 R7
 32
-R32
+R34
 !i10b 1
-R33
-Z56 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\mynadder.vhd|
-Z57 !s107 D:\PROJECTS\ArchPhase1\mynadder.vhd|
+R35
+Z58 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\mynadder.vhd|
+Z59 !s107 D:\PROJECTS\ArchPhase1\mynadder.vhd|
 !i113 1
 R12
 R13
@@ -322,32 +322,32 @@ VniRk;BmlJ88aTo?TfE=HE1
 !s100 IGJSVa3JiZZfD3f?51nCY3
 R7
 32
-R32
+R34
 !i10b 1
-R33
-R56
-R57
+R35
+R58
+R59
 !i113 1
 R12
 R13
 Ethirtytwobitsadder
-Z58 w1713551603
+Z60 w1713551603
 R2
 R3
 R4
-Z59 8D:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd
-Z60 FD:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd
+Z61 8D:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd
+Z62 FD:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd
 l0
 L4
 V<nA4SJC>kaBmIEA2kGz>=2
 !s100 nU^YGKgRl4BAiO^C>hCGz2
 R7
 32
-Z61 !s110 1713729610
+Z63 !s110 1713729610
 !i10b 1
-Z62 !s108 1713729609.000000
-Z63 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd|
-Z64 !s107 D:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd|
+Z64 !s108 1713729609.000000
+Z65 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd|
+Z66 !s107 D:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd|
 !i113 1
 R12
 R13
@@ -361,11 +361,11 @@ V2f=JkcO4c2BZ8_`i6OXF23
 !s100 =>nXCZ2RFzHe:^Ehag`@K1
 R7
 32
-R61
-!i10b 1
-R62
 R63
+!i10b 1
 R64
+R65
+R66
 !i113 1
 R12
 R13
