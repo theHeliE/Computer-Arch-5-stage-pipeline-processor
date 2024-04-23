@@ -22,12 +22,15 @@ begin
     alu_output_int <=
             A or B when "0000",
             not A when "0001",
-            A - B when "0010",
-            A - 1 when "0011",
-            A when "0100",
-            B when "0101",
-            A + B when "0110",
-            A + 1 when "0111",
+            A and B when "0010",
+            A xor B when "0011",
+            A - B when "0100",
+            A - 1 when "0101",
+            A when "0110",
+            B when "0111",
+            A + B when "1000",
+            A + 1 when "1001",
+            0 - A when "1010",
             (others => '0') when others;
         carry <= '1' when (sel="0110" and ((A >= 0 and B > to_signed(2147483647, 32) - A) or
             (B >= 0 and A > to_signed(2147483647, 32) - B))) or

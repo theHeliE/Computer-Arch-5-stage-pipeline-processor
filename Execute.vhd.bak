@@ -1,0 +1,70 @@
+Library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.all;
+entity Execute is
+    port(
+        clk: in STD_LOGIC;
+        reset: in STD_LOGIC;
+        A,B:in signed(31 downto 0);
+        data2: in signed(31 downto 0);
+        imm: in signed(31 downto 0);
+        alu_sel:in std_logic_vector(3 downto 0);
+        alu_src:in std_logic_vector(1 downto 0);
+
+
+        Output:out signed(31 downto 0);
+        flagReg:out std_logic_vector(3 downto 0)
+    );
+end entity;
+
+Architecture ar of Execute is
+    component ALU_CCR_Integeration is 
+    port(
+        reset: in std_logic;
+        A, B: in signed(31 downto 0);
+        ALU_out: out signed(31 downto 0);
+        sel: in std_logic_vector(3 downto 0);
+        zero_flag : out std_logic;
+        carry_flag : out std_logic;
+        overflow_flag : out std_logic;
+        negative_flag : out std_logic
+);
+end component;
+
+component mux is
+Generic ( n : Integer:=32);
+PORT ( 
+    in0,in1,in2,in3 : IN std_logic_vector (n-1 DOWNTO 0);
+	sel : IN  std_logic_vector (1 DOWNTO 0);
+	out1 : OUT std_logic_vector (n-1 DOWNTO 0)
+    );
+end component;
+
+    signal alu_result : signed(31 downto 0);
+    SIGNAL alu_flag:std_logic_vector(3 downto 0);
+    begin
+        mux1: mux generic (32) port map(
+            in0 => data2,
+            in1 => imm,
+            in2 => '0',
+            in3 => '0',
+            sel => alu_src,
+            out1 => B
+        );
+
+        add: ALU_CCR_Integeration port map(
+            reset => reset,
+            A => A,
+            B => B,
+            ALU_out => alu_result,
+            sel => alu_sel,
+            zero_flag => alu_R(0),
+            carry_flag => alu_R(1),
+            overflow_flag => alu_R(2),
+            negative_flag => alu_R(3)
+        );
+
+
+    Output<=alu_result;
+    flagReg<=alu_flag;
+    end ar;

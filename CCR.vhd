@@ -12,6 +12,7 @@ entity CCR is
         alu_zero: in std_logic;
         alu_overflow: in std_logic;
         alu_negative: in std_logic;
+        flag_enable : in std_logic;
         zero_flag : out std_logic;
         carry_flag : out std_logic;
         overflow_flag : out std_logic;
@@ -44,10 +45,17 @@ begin
             overflow_flag_internal <= '0';
             negative_flag_internal <= '0';
         else
-            zero_flag_internal<= alu_zero;
-            carry_flag_internal<=alu_carry;
-            overflow_flag_internal <= alu_overflow;
-            negative_flag_internal<=alu_negative;
+            if flag_enable = '1' then
+                zero_flag_internal<= alu_zero;
+                carry_flag_internal<=alu_carry;
+                overflow_flag_internal <= alu_overflow;
+                negative_flag_internal<=alu_negative;
+            else
+                zero_flag_internal <= zero_flag_internal;
+                carry_flag_internal <= carry_flag_internal;
+                overflow_flag_internal <= overflow_flag_internal;
+                negative_flag_internal <= negative_flag_internal;
+            end if;
         end if;
     end process;
 

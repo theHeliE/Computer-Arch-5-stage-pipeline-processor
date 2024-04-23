@@ -2,22 +2,25 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY DecodeExecute IS
-    PORT (
+    PORT ( 
         clk : IN STD_LOGIC;
-        writeAddress : IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- fetch decode
-        writeEnable : IN STD_LOGIC; -- fetch decode
-        readData1 : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- reg file
-        readData2 : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- reg file
-        aluSelector : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- controller
-        aluCin : IN STD_LOGIC; -- controller
+        PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        data1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- from reg file
+        data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- from reg file
+        Rsrc1: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- R source 1 (from F/D)
+        Rdst : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- R destination (from F/D)
+        IMM: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- Immediate (from F/D)
+        inPort: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- In Instruction
 
-        
-        outWriteAddr : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        outWriteEnable : OUT STD_LOGIC;
-        outReadData1 : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-        outReadData2 : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-        outAluSelector : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        outAluCin : OUT STD_LOGIC
+       
+
+        outPC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --PC to Ex/Mem
+        outData1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);--to ALU & Ex/Mem
+        outData2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & ALU
+        outRsrc1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & Ex/Mem
+        outRdst : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & Ex/Mem
+        outIMM: OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & ALU
+        outInPort: OUT STD_LOGIC_VECTOR(31 DOWNTO 0) --to Ex/Mem
     );
 
 END ENTITY DecodeExecute;
@@ -27,12 +30,13 @@ BEGIN
     PROCESS (clk) IS
     BEGIN
         IF rising_edge(clk) THEN
-            outWriteAddr <= writeAddress;
-            outWriteEnable <= writeEnable;
-            outReadData1 <= readData1;
-            outReadData2 <= readData2;
-            outAluSelector <= aluSelector;
-            outAluCin <= aluCin;
+            outPC <= PC;
+            outData1 <= data1;
+            outData2 <= data2;
+            outRsrc1 <= Rsrc1;
+            outRdst <= Rdst;
+            outIMM <= IMM;
+            outInPort <= inPort;
         END IF;
     END PROCESS;
 END decExecRegMain;
