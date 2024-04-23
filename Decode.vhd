@@ -1,0 +1,89 @@
+Library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.all;
+
+
+entity decode is 
+    Port ( 
+        clk : in  STD_LOGIC;
+        reset : in  STD_LOGIC;
+        Rsrc1 : in  STD_LOGIC_VECTOR (2 downto 0);
+        Rsrc2 : in  STD_LOGIC_VECTOR (2 downto 0);
+        Rdst : in  STD_LOGIC_VECTOR (2 downto 0);
+        imm : in  signed (15 downto 0);
+
+        regWrite1 : in STD_LOGIC;
+        regWrite2 : in STD_LOGIC;
+
+        writeData1 : in STD_LOGIC_VECTOR (31 downto 0);
+        writeData2 : in STD_LOGIC_VECTOR (31 downto 0);
+        regDst1 : in STD_LOGIC_VECTOR (2 downto 0);
+
+
+        immExtended : out  signed (31 downto 0);
+        Data1: out STD_LOGIC_VECTOR (31 downto 0);
+        Data2: out STD_LOGIC_VECTOR (31 downto 0)
+
+    );
+end decode;
+
+architecture Behavioral of decode is
+
+    signal immExtended_int : signed (31 downto 0);
+    signal Data1_int, Data2_int : STD_LOGIC_VECTOR (31 downto 0);
+
+    COMPONENT RegFileMem IS
+    PORT (
+        clk : IN STD_LOGIC;
+        read1enable : IN STD_LOGIC;
+        read2enable : IN STD_LOGIC;
+        write1enable : IN STD_LOGIC;
+        write2enable : IN STD_LOGIC;
+        reset : IN STD_LOGIC;
+        addressread1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        addressread2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        addresswrite1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        addresswrite2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        write1,write2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        read1,read2: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+END component;
+
+component signExtend is
+    port (
+        imm16 : in signed(15 downto 0);
+        imm32 : out signed(31 downto 0)
+    );
+end component;
+
+begin
+    
+        signExtend1: signExtend port map(
+            imm16 => imm,
+            imm32 => immExtended_int
+        );
+    
+        immExtended <= immExtended_int;
+    
+        regFileMem1: RegFileMem port map(
+            clk => clk,
+            read1enable => '1',
+            read2enable => '1',
+            write1enable => regWrite1,
+            write2enable => regWrite2,
+            reset => reset,
+            addressread1 => Rsrc1, 
+            addressread2 => Rsrc2,
+            addresswrite1 => Rdst,
+            addresswrite2 => regDst1,
+            write1 => writeData1,
+            write2 => writeData2,
+            read1 => Data1_int,
+            read2 => Data2_int
+        );
+
+        Data1 <= Data1_int;
+        Data2 <= Data2_int;
+    
+    end Behavioral;
+

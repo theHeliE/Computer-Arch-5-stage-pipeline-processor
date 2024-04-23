@@ -1,4 +1,13 @@
-D:/PROJECTS/ArchPhase1/Controller.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\Controller.vhd}
+D:/PROJECTS/ArchPhase1/Execute.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\Execute.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity Execute
+-- Compiling architecture ar of Execute
+
+} {} {}} D:/PROJECTS/ArchPhase1/Controller.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\Controller.vhd}
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -54,6 +63,18 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling architecture with_select_int_mux of int_mux_generic
 -- Loading entity int_mux_generic
 
+} {} {}} D:/PROJECTS/ArchPhase1/RegFileMem.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/RegFileMem.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package memregisterfile_pkg
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_textio
+-- Loading package memregisterfile_pkg
+-- Compiling entity RegFileMem
+-- Compiling architecture memRegMain of RegFileMem
+
 } {} {}} D:/PROJECTS/ArchPhase1/thirtytwobitadder.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd}
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
@@ -77,6 +98,24 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Loading package std_logic_1164
 -- Compiling entity DecodeExecute
 -- Compiling architecture decExecRegMain of DecodeExecute
+
+} {} {}} D:/PROJECTS/ArchPhase1/signExtend.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/signExtend.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity signExtend
+-- Compiling architecture Behavioral of signExtend
+
+} {} {}} D:/PROJECTS/ArchPhase1/ALU_CCR_Integeration.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity ALU_CCR_Integeration
+-- Compiling architecture alu_ccr_arch of ALU_CCR_Integeration
 
 } {} {}} D:/PROJECTS/ArchPhase1/writeBackReg_1.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/writeBackReg_1.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
