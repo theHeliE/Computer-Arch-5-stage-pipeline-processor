@@ -1,0 +1,26 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+
+ENTITY pc IS
+    PORT (
+        clk, enable, reset : IN STD_LOGIC;
+        counter : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
+    );
+END pc;
+
+ARCHITECTURE pcMain OF pc IS
+    SIGNAL internalCounter : STD_LOGIC_VECTOR(11 DOWNTO 0) := "000000000000";
+
+BEGIN
+    PROCESS (clk, reset, enable)
+    BEGIN
+        IF rising_edge(reset) THEN
+            internalCounter <= (OTHERS => '0');
+        ELSIF rising_edge(clk) AND enable = '1' THEN
+            internalCounter <= STD_LOGIC_VECTOR(unsigned(internalCounter) + 1);
+        END IF;
+    END PROCESS;
+
+    counter <= internalCounter;
+END pcMain;

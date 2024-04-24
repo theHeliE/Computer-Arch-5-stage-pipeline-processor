@@ -1,0 +1,28 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity NewfetchDecodeBuffer is
+    port (
+        clk : in std_logic;
+        reset : in std_logic;
+        instructionin : in std_logic_vector(15 downto 0);
+        immediatein: in std_logic_vector(15 downto 0);
+        externalBuffer: out std_logic_vector(31 downto 0)
+    );
+end entity NewfetchDecodeBuffer;
+
+architecture fdb of NewfetchDecodeBuffer is
+    signal internalbuffer:std_logic_vector(31 downto 0):=(others=>'0');
+    begin
+    process (clk, reset)
+    begin
+        if reset = '1' then
+            internalbuffer <= (others => '0');
+        elsif rising_edge(clk) then   --Little Endian Configuration
+            internalBuffer(15 downto 0) <= instructionin;
+            internalBuffer(31 downto 16)<= immediatein;
+    end if;
+    end process;
+    externalBuffer<=internalBuffer;
+    
+end architecture fdb;
