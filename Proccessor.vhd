@@ -8,18 +8,14 @@ entity processor is
         clk : in  STD_LOGIC;
         rst : in  STD_LOGIC;
         PC  : in  STD_LOGIC_VECTOR (31 downto 0);
-
-        alu_sel: in  STD_LOGIC_VECTOR (3 downto 0);
-        alu_src: in  std_logic_vector (1 downto 0);
-        flag_enable: in  STD_LOGIC;
+        opcode : in std_logic_vector (4 downto 0);
 
         Rsrc1 : in  STD_LOGIC_VECTOR (2 downto 0);
         Rsrc2 : in  STD_LOGIC_VECTOR (2 downto 0);
-        
-        Rdst: in  STD_LOGIC_VECTOR (2 downto 0);
+        Rdst : in STD_LOGIC_VECTOR (2 downto 0);
+
         imm: in  signed (15 downto 0);
-        RegWrite1: in  STD_LOGIC;
-        RegWrite2: in  STD_LOGIC;
+
         inPort: in STD_LOGIC_VECTOR (31 downto 0);
 
         alu_result: out signed (31 downto 0);
@@ -37,6 +33,33 @@ architecture Behavioral of processor is
     signal outIMM_int: signed (31 downto 0);
     signal outRsrc1_int, outRdst_int: std_logic_vector (2 downto 0);
 
+    signal alu_sel: std_logic_vector(3 downto 0);
+    signal MemToReg: std_logic_vector(1 downto 0);
+    signal alu_src, flag_enable, RegWrite1, RegWrite2, Regdst, MemWrite, MemRead, SPplus, SPmin, OUTenable, JMP, Z, PROTECT, RET, FlagEnable  : std_logic;
+    signal alu_src_ex: std_logic_vector(1 downto 0);
+
+    component controller IS
+    PORT (
+	Reset : IN STD_LOGIC;
+        opCode : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+        RegDist : OUT STD_LOGIC;
+	RegWrite1 : OUT STD_LOGIC;
+	RegWrite2 : OUT STD_LOGIC;
+	ALUsrc : OUT STD_LOGIC;
+	MemWrite : OUT STD_LOGIC;
+	MemRead : OUT STD_LOGIC;
+	MemToReg : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+	SPplus : OUT STD_LOGIC;
+	SPmin : OUT STD_LOGIC; 
+        ALUselector : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        OUTenable : OUT STD_LOGIC;
+	JMP : OUT STD_LOGIC;
+	Z : OUT STD_LOGIC;
+	PROTECT : OUT STD_LOGIC;
+	RET : OUT STD_LOGIC;
+	FlagEnable : OUT STD_LOGIC
+    );
+END component;
 
     component decode is 
     Port ( 
@@ -106,6 +129,28 @@ architecture Behavioral of processor is
     end component;
 
     begin
+            controller1: controller port map(
+                Reset => rst,
+            opCode => opcode,
+            RegDist => Regdst,
+        RegWrite1 => RegWrite1,
+        RegWrite2 => RegWrite2,
+        ALUsrc => alu_src,
+        MemWrite => MemWrite,
+        MemRead => MemRead,
+        MemToReg => MemToReg,
+        SPplus => SPplus,
+        SPmin => SPmin,
+            ALUselector => alu_sel,
+            OUTenable => OUTenable,
+        JMP => JMP,
+        Z => Z,
+        PROTECT => PROTECT,
+        RET => RET,
+        FlagEnable => flag_enable 
+        );
+
+
         decode1: decode port map(
             clk => clk,
             reset => rst,
@@ -141,14 +186,16 @@ architecture Behavioral of processor is
             outInPort => outInPort_int
         );
 
+        alu_src_ex <= '0' & alu_src;
+
         execute1: Execute port map(
             clk => clk,
             reset => rst,
             A => signed(Data1_int),
             data2 => signed(Data2_int),
             imm => immExtended_int,
-            alu_sel => alu_sel,
-            alu_src => alu_src,
+            alu_sel =>  alu_sel,
+            alu_src => alu_src_ex,
             flag_enable => flag_enable,
             Output => alu_result,
             flagReg => flag
