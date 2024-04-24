@@ -1,0 +1,66 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+Entity FetchStage is
+    Port ( clk : in STD_LOGIC;
+           reset : in STD_LOGIC;
+           enable : in STD_LOGIC;       
+           Instruction : out STD_LOGIC_VECTOR(31 downto 0));
+End FetchStage;
+Architecture Fetch of FetchStage is 
+component NewPC IS
+    PORT (
+        clk, enable, reset : IN STD_LOGIC;
+        sel: in std_logic;
+        counterout :OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+END component;
+component NewInstructionCache IS
+    PORT(
+        clk : IN std_logic;
+        reset: IN std_logic;
+        address : IN  std_logic_vector(31 DOWNTO 0);
+        instruction : OUT std_logic_vector(15 DOWNTO 0);
+        immediate: OUT std_logic_vector(15 DOWNTO 0)
+		);
+END component ;
+component NewfetchDecodeBuffer is
+    port (
+        clk : in std_logic;
+        reset : in std_logic;
+        instructionin : in std_logic_vector(15 downto 0);
+        immediatein: in std_logic_vector(15 downto 0);
+        externalBuffer: out std_logic_vector(31 downto 0)
+    );
+end component;
+    signal PC_reg : STD_LOGIC_VECTOR(31 downto 0);
+    signal PC_sel:std_logic:='0';
+    signal Instruction_reg : STD_LOGIC_VECTOR(15 downto 0);
+    signal Immediate_reg: std_logic_vector(15 downto 0);
+    signal Immediate_bit:std_logic:='0';
+    signal AdderOutCarry:std_logic:='0';
+    
+    BEGIN
+    pcM:NewPC PORT MAP(
+        clk => clk,
+        enable => enable,
+        reset => reset,
+        sel => PC_sel,
+        counterout => PC_reg  
+    );
+    icache:InstructionCache PORT MAP(
+        clk => clk,
+        reset=>reset,
+        address => PC_reg,
+        instruction => Instruction_reg,
+        immediate=>Immediate_reg
+    );  
+    PC_sel<=Instruction_reg(0); 
+    fetchDecodeBuffer1:fetchDecodeBuffer PORT MAP(
+        clk => clk,
+        reset => reset,
+        instructionin => Instruction_reg,
+        immediatein =>Immediate_reg,
+        Externalbuffer => Instruction
+    );
+end Fetch;

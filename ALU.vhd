@@ -40,4 +40,3 @@ begin
         negative <= alu_output_int(31);
         alu_output <= alu_output_int;
 end architecture Behavioral;
-
