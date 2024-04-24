@@ -7,8 +7,11 @@ entity processor is
     Port ( 
         clk : in  STD_LOGIC;
         rst : in  STD_LOGIC;
+        PC  : in  STD_LOGIC_VECTOR (31 downto 0);
 
         alu_sel: in  STD_LOGIC_VECTOR (3 downto 0);
+        alu_src: in  std_logic_vector (1 downto 0);
+        flag_enable: in  STD_LOGIC;
 
         Rsrc1 : in  STD_LOGIC_VECTOR (2 downto 0);
         Rsrc2 : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -19,7 +22,7 @@ entity processor is
         RegWrite2: in  STD_LOGIC;
         inPort: in STD_LOGIC_VECTOR (31 downto 0);
 
-        alu_result: out STD_LOGIC_VECTOR (31 downto 0);
+        alu_result: out signed (31 downto 0);
         flag: out STD_LOGIC_VECTOR (3 downto 0)
         );
 
@@ -28,12 +31,12 @@ entity processor is
 end processor;
 
 architecture Behavioral of processor is
-    signal Rsrc1_val, Rsrc2_val, Rdst_val: STD_LOGIC_VECTOR (31 downto 0);
-    signal imm_val: signed (31 downto 0);
-    signal RegWrite1_val, RegWrite2_val: STD_LOGIC;
-    signal inPort_val: STD_LOGIC_VECTOR (31 downto 0);
-    signal alu_result_val: STD_LOGIC_VECTOR (31 downto 0);
-    signal flag_val: STD_LOGIC_VECTOR (3 downto 0);
+
+    signal Data1_int, Data2_int, PC_int, outInPort_int, outData1_int, outData2_int: std_logic_vector (31 downto 0);
+    signal immExtended_int: signed (31 downto 0);
+    signal outIMM_int: signed (31 downto 0);
+    signal outRsrc1_int, outRdst_int: std_logic_vector (2 downto 0);
+
 
     component decode is 
     Port ( 
@@ -61,26 +64,26 @@ architecture Behavioral of processor is
 
 
     component DecodeExecute IS
-        PORT ( 
-            clk : IN STD_LOGIC;
-            PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-            data1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- from reg file
-            data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- from reg file
-            Rsrc1: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- R source 1 (from F/D)
-            Rdst : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- R destination (from F/D)
-            IMM: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- Immediate (from F/D)
-            inPort: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- In Instruction
+    PORT ( 
+        clk : IN STD_LOGIC;
+        PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        data1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- from reg file
+        data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- from reg file
+        Rsrc1: IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- R source 1 (from F/D)
+        Rdst : IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- R destination (from F/D)
+        IMM: IN signed(31 DOWNTO 0); -- Immediate (from F/D)
+        inPort: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- In Instruction
 
-        
+       
 
-            outPC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --PC to Ex/Mem
-            outData1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);--to ALU & Ex/Mem
-            outData2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & ALU
-            outRsrc1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & Ex/Mem
-            outRdst : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & Ex/Mem
-            outIMM: OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & ALU
-            outInPort: OUT STD_LOGIC_VECTOR(31 DOWNTO 0) --to Ex/Mem
-        );
+        outPC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --PC to Ex/Mem
+        outData1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);--to ALU & Ex/Mem
+        outData2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & ALU
+        outRsrc1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0); --to mux & Ex/Mem
+        outRdst : OUT STD_LOGIC_VECTOR(2 DOWNTO 0); --to mux & Ex/Mem
+        outIMM: OUT signed(31 DOWNTO 0); --to mux & ALU
+        outInPort: OUT STD_LOGIC_VECTOR(31 DOWNTO 0) --to Ex/Mem
+    );
 
     END component;
 
@@ -102,58 +105,54 @@ architecture Behavioral of processor is
         );
     end component;
 
-
     begin
-    decode1: decode port map(
-        clk => clk,
-        reset => rst,
-        Rsrc1 => Rsrc1,
-        Rsrc2 => Rsrc2,
-        Rdst => Rdst,
-        imm => imm,
-        regWrite1 => RegWrite1,
-        regWrite2 => RegWrite2,
-        writeData1 => inPort,
-        writeData2 => inPort,
-        regDst1 => Rdst_val,
-        immExtended => imm_val,
-        Data1 => Rsrc1_val,
-        Data2 => Rsrc2_val
-    );
+        decode1: decode port map(
+            clk => clk,
+            reset => rst,
+            Rsrc1 => Rsrc1,
+            Rsrc2 => Rsrc2,
+            Rdst => Rdst,
+            imm => imm,
+            regWrite1 => RegWrite1,
+            regWrite2 => RegWrite2,
+            writeData1 => inPort,
+            writeData2 => inPort,
+            regDst1 => Rdst,
+            immExtended => immExtended_int,
+            Data1 => Data1_int,
+            Data2 => Data2_int
+        );
 
-    decodeExecute1: DecodeExecute port map(
-        clk => clk,
-        PC => inPort_val,
-        data1 => Rsrc1_val,
-        data2 => Rsrc2_val,
-        Rsrc1 => Rsrc1_val,
-        Rdst => Rdst_val,
-        IMM => imm_val,
-        inPort => inPort_val,
-        outPC => alu_result_val,
-        outData1 => Rsrc1_val,
-        outData2 => Rsrc2_val,
-        outRsrc1 => Rsrc1_val,
-        outRdst => Rdst_val,
-        outIMM => imm_val,
-        outInPort => inPort_val
-    );
+        decodeExecute1: DecodeExecute port map(
+            clk => clk,
+            PC => PC,
+            data1 => Data1_int,
+            data2 => Data2_int,
+            Rsrc1 => Rsrc1,
+            Rdst => Rdst,
+            IMM => immExtended_int,
+            inPort => inPort,
+            outPC => PC_int,
+            outData1 => outData1_int,
+            outData2 => outData2_int,
+            outRsrc1 => outRsrc1_int,
+            outRdst => outRdst_int,
+            outIMM => outIMM_int,
+            outInPort => outInPort_int
+        );
 
-    execute1: Execute port map(
-        clk => clk,
-        reset => rst,
-        A => Rsrc1_val,
-        data2 => Rsrc2_val,
-        imm => imm_val,
-        alu_sel => "0000",
-        alu_src => "00",
-        flag_enable => '0',
-        Output => alu_result_val,
-        flagReg => flag_val
-    );
-
-    alu_result <= alu_result_val;
-    flag <= flag_val;
-
+        execute1: Execute port map(
+            clk => clk,
+            reset => rst,
+            A => signed(Data1_int),
+            data2 => signed(Data2_int),
+            imm => immExtended_int,
+            alu_sel => alu_sel,
+            alu_src => alu_src,
+            flag_enable => flag_enable,
+            Output => alu_result,
+            flagReg => flag
+        );
+        
 end Behavioral;
         
