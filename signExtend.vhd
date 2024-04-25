@@ -4,8 +4,8 @@ use IEEE.numeric_std.all;
 
 entity signExtend is
     port (
-        imm16 : in signed(15 downto 0);
-        imm32 : out signed(31 downto 0)
+        imm16 : in unsigned(15 downto 0);
+        imm32 : out unsigned(31 downto 0)
     );
 end entity signExtend;
 

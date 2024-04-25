@@ -28,14 +28,14 @@ END controller;
 ARCHITECTURE controllerMain OF controller IS
 BEGIN
     aluSelector <= "0000" WHEN Reset = '1' ELSE
-	"0000" WHEN opCode = "00000" ELSE --NOP
+	"0000" WHEN opCode = "00000"   ELSE --NOP
         "0001" WHEN opCode = "00001" ELSE --NOT
 	"1010" WHEN opCode = "00010" ELSE --NEG
 	"1001" WHEN opCode = "00011" ELSE --INC
 	"0101" WHEN opCode = "00100" ELSE --DEC	
 	"0110" WHEN opCode = "00101" ELSE --OUT	
 	"0110" WHEN opCode = "00111" ELSE --MOV	
-	"0111" WHEN opCode = "01000" ELSE --SWAP	
+	"0111" WHEN opCode = "01000"  ELSE --SWAP	
 	"1000" WHEN opCode = "01001" ELSE --ADD
 	"1000" WHEN opCode = "01010" ELSE --ADDI
 	"0100" WHEN opCode = "01011" ELSE --SUB	
@@ -45,7 +45,9 @@ BEGIN
 	"0011" WHEN opCode = "01111" ELSE --XOR	
 	"0100" WHEN opCode = "10000" ELSE --CMP	
 	"1000" WHEN opCode = "10100" ELSE --LDD	
-	"1000" WHEN opCode = "10101"; --STD	
+	"1000" WHEN opCode = "10101" ELSE --STD	
+	"0111" WHEN opCode ="10011"; --LDM
+	
 
 
 RegDist <= '0' WHEN Reset = '1' ELSE
@@ -84,7 +86,7 @@ RegWrite1 <= '0' WHEN Reset = '1' ELSE
 	'0';
 
 RegWrite2 <= '0' WHEN Reset = '1' ELSE
-	'1' WHEN opCode = "00101" --OUT	
+	'1' WHEN opCode = "01000" --SWAP
 	ELSE '0' ;
 
 ALUsrc <= '0' WHEN Reset = '1' ELSE
@@ -92,7 +94,8 @@ ALUsrc <= '0' WHEN Reset = '1' ELSE
 	'1' WHEN opCode = "01100" ELSE --SUBI
 	'1' WHEN opCode = "10100" ELSE --LDD	
 	'1' WHEN opCode = "10101" ELSE --STD
-        '0';	
+	'1' WHEN opcode = "10011" ELSE --LDM
+    '0';	
 
 MemWrite <= '0' WHEN Reset = '1' ELSE
 	'1' WHEN opCode = "10001" ELSE --PUSH
@@ -102,7 +105,6 @@ MemWrite <= '0' WHEN Reset = '1' ELSE
 
 MemRead <= '0' WHEN Reset = '1' ELSE
 	'1' WHEN opCode = "10010" ELSE --POP	
-	'1' WHEN opCode = "10011" ELSE --LDM	
 	'1' WHEN opCode = "10100" ELSE --LDD	
 	'1' WHEN opCode = "11011" ELSE --RET	
 	'1' WHEN opCode = "11100" ELSE --RTI	
@@ -111,7 +113,7 @@ MemRead <= '0' WHEN Reset = '1' ELSE
 MemToReg <= "00" WHEN Reset = '1' ELSE
 	"10" WHEN opCode = "00110" ELSE --IN	
 	"01" WHEN opCode = "10010" ELSE --POP	
-	"01" WHEN opCode = "10011" ELSE --LDM	
+	"00" WHEN opCode = "10011" ELSE --LDM	
 	"01" WHEN opCode = "10100" ELSE --LDD	
 	"00";
 

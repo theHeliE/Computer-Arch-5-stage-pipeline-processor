@@ -1,10 +1,14 @@
+
 Library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-
+USE ieee.std_logic_textio.ALL;
+USE std.textio.ALL;
+use work.memregisterfile.all;
 
 entity decode is 
     Port ( 
+        clk : in  STD_LOGIC;
         reset : in  STD_LOGIC;
         Rsrc1 : in  STD_LOGIC_VECTOR (2 downto 0);
         Rsrc2 : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -21,8 +25,8 @@ entity decode is
 
         immExtended : out  signed (31 downto 0);
         Data1: out STD_LOGIC_VECTOR (31 downto 0);
-        Data2: out STD_LOGIC_VECTOR (31 downto 0)
-
+        Data2: out STD_LOGIC_VECTOR (31 downto 0);
+        reg: out vector_array
     );
 end decode;
 
@@ -30,7 +34,6 @@ architecture Behavioral of decode is
 
     signal immExtended_int : signed (31 downto 0);
     signal Data1_int, Data2_int : STD_LOGIC_VECTOR (31 downto 0);
-    signal vector_array : STD_LOGIC_VECTOR(31 downto 0);
 
     COMPONENT RegFileMem IS
     PORT (
@@ -45,7 +48,8 @@ architecture Behavioral of decode is
         addresswrite1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         addresswrite2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         write1,write2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        read1,read2: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+        read1,read2: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        Registers : OUT vector_array
     );
 END component;
 
@@ -66,13 +70,13 @@ begin
         immExtended <= immExtended_int;
     
         regFileMem1: RegFileMem port map(
-            clk => '1',
+            clk => clk,
             read1enable => '1',
             read2enable => '1',
             write1enable => regWrite1,
             write2enable => regWrite2,
             reset => reset,
-            addressread1 => Rsrc1,
+            addressread1 => Rsrc1, 
             addressread2 => Rsrc2,
             addresswrite1 => Rdst,
             addresswrite2 => regDst1,
@@ -80,7 +84,7 @@ begin
             write2 => writeData2,
             read1 => Data1_int,
             read2 => Data2_int,
-            registers => vector_array
+            Registers =>reg
         );
 
         Data1 <= Data1_int;

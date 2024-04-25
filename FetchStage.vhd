@@ -3,14 +3,13 @@ USE IEEE.std_logic_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 Entity FetchStage is
     Port ( clk : in STD_LOGIC;
-           reset : in STD_LOGIC;
-           enable : in STD_LOGIC;       
+           reset : in STD_LOGIC;      
            Instruction : out STD_LOGIC_VECTOR(31 downto 0));
 End FetchStage;
 Architecture Fetch of FetchStage is 
 component NewPC IS
     PORT (
-        clk, enable, reset : IN STD_LOGIC;
+        clk, reset : IN STD_LOGIC;
         sel: in std_logic;
         counterout :OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
@@ -43,7 +42,6 @@ end component;
     BEGIN
     pcM:NewPC PORT MAP(
         clk => clk,
-        enable => enable,
         reset => reset,
         sel => PC_sel,
         counterout => PC_reg  

@@ -1,7 +1,10 @@
+
 Library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-
+USE ieee.std_logic_textio.ALL;
+USE std.textio.ALL;
+use work.memregisterfile_pkg.all;
 
 entity decode is 
     Port ( 
@@ -20,16 +23,16 @@ entity decode is
         regDst1 : in STD_LOGIC_VECTOR (2 downto 0);
 
 
-        immExtended : out  signed (31 downto 0);
+        immExtended : out  unsigned (31 downto 0);
         Data1: out STD_LOGIC_VECTOR (31 downto 0);
-        Data2: out STD_LOGIC_VECTOR (31 downto 0)
-
+        Data2: out STD_LOGIC_VECTOR (31 downto 0);
+        reg: out vector_array
     );
 end decode;
 
 architecture Behavioral of decode is
 
-    signal immExtended_int : signed (31 downto 0);
+    signal immExtended_int : unsigned (31 downto 0);
     signal Data1_int, Data2_int : STD_LOGIC_VECTOR (31 downto 0);
 
     COMPONENT RegFileMem IS
@@ -45,21 +48,22 @@ architecture Behavioral of decode is
         addresswrite1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         addresswrite2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         write1,write2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        read1,read2: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+        read1,read2: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        Registers : OUT vector_array
     );
 END component;
 
 component signExtend is
     port (
-        imm16 : in signed(15 downto 0);
-        imm32 : out signed(31 downto 0)
+        imm16 : in unsigned(15 downto 0);
+        imm32 : out unsigned(31 downto 0)
     );
 end component;
 
 begin
     
         signExtend1: signExtend port map(
-            imm16 => imm,
+            imm16 => unsigned(imm),
             imm32 => immExtended_int
         );
     
@@ -79,7 +83,8 @@ begin
             write1 => writeData1,
             write2 => writeData2,
             read1 => Data1_int,
-            read2 => Data2_int
+            read2 => Data2_int,
+            Registers =>reg
         );
 
         Data1 <= Data1_int;

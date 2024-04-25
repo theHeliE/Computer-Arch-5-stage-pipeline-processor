@@ -105,3 +105,12 @@ Exception c0000005 has occurred at address 7a6bc952. Traceback:
 StackWalk failed 299
 # End of Stack Trace
 
+# Current time Thu Apr 25 09:30:26 2024
+# ModelSim - Intel FPGA Edition Stack Trace
+# Program = vish
+# Id = "10.5b"
+# Version = "2016.10"
+# Date = "Oct  5 2016"
+# Platform = win32pe
+
+Exception c0000005 has occurred at address 00000020. Traceback:

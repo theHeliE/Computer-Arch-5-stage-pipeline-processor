@@ -4,7 +4,7 @@ USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY NewPC IS
     PORT (
-        clk, enable, reset : IN STD_LOGIC;
+        clk, reset : IN STD_LOGIC;
         sel: in std_logic;
         counterout :OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
@@ -12,14 +12,14 @@ END NewPC;
 
 ARCHITECTURE pcMain OF NewPC IS
 BEGIN
-    PROCESS (clk, reset, enable)
+    PROCESS (clk, reset)
     VARIABLE internalCounter: std_logic_vector(31 downto 0):=(others=>'0');
     VARIABLE sid:std_logic:='0';
     BEGIN
         IF reset='1' THEN
             internalcounter := (OTHERS => '0');
              counterout<=internalcounter;
-        ELSIF rising_edge(clk) AND (enable = '1' or rising_edge(enable)) THEN
+        ELSIF rising_edge(clk)  THEN
              if sid ='1' then
              internalcounter:=std_logic_vector(unsigned(internalcounter)+2);
              else

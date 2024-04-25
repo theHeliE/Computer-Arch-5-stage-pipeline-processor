@@ -1,4 +1,4 @@
-D:/PROJECTS/ArchPhase1/Execute.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\Execute.vhd}
+D:/PROJECTS/ArchPhase1/Execute.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/Execute.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -7,13 +7,30 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity Execute
 -- Compiling architecture ar of Execute
 
-} {} {}} D:/PROJECTS/ArchPhase1/mynadder.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\mynadder.vhd}
+} {} {}} D:/PROJECTS/ArchPhase1/Controller.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/Controller.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity controller
+-- Compiling architecture controllerMain of controller
+
+} {} {}} D:/PROJECTS/ArchPhase1/mynadder.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/mynadder.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Compiling entity my_nadder
 -- Compiling architecture a_my_adder of my_nadder
+
+} {} {}} D:/PROJECTS/ArchPhase1/mux2bits.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/mux2bits.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity mux2bits
+-- Compiling architecture with_select_mux of mux2bits
 
 } {} {}} D:/PROJECTS/ArchPhase1/FetchStage.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/FetchStage.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
@@ -34,7 +51,7 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity NewInstructionCache
 -- Compiling architecture Cachemem of NewInstructionCache
 
-} {} {}} D:/PROJECTS/ArchPhase1/CCR.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\CCR.vhd}
+} {} {}} D:/PROJECTS/ArchPhase1/CCR.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/CCR.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -51,7 +68,7 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity NewfetchDecodeBuffer
 -- Compiling architecture fdb of NewfetchDecodeBuffer
 
-} {} {}} D:/PROJECTS/ArchPhase1/ALU.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\ALU.vhd}
+} {} {}} D:/PROJECTS/ArchPhase1/ALU.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/ALU.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -70,15 +87,6 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling architecture with_select_mux of mux_generic
 -- Loading entity mux_generic
 
-} {} {}} D:/PROJECTS/ArchPhase1/Decode.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\Decode.vhd}
-Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity decode
--- Compiling architecture Behavioral of decode
-
 } {} {}} D:/PROJECTS/ArchPhase1/int_mux.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/int_mux.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
@@ -90,7 +98,27 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling architecture with_select_int_mux of int_mux_generic
 -- Loading entity int_mux_generic
 
-} {} {}} D:/PROJECTS/ArchPhase1/NewPC.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\NewPC.vhd}
+} {} {}} D:/PROJECTS/ArchPhase1/Decode.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/Decode.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_textio
+-- Loading package memregisterfile_pkg
+-- Compiling entity decode
+-- Compiling architecture Behavioral of decode
+
+} {} {}} D:/PROJECTS/ArchPhase1/MemoryWriteBack.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/MemoryWriteBack.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity MemoryWriteBack
+-- Compiling architecture MemWB of MemoryWriteBack
+
+} {} {}} D:/PROJECTS/ArchPhase1/NewPC.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/NewPC.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -111,7 +139,7 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity RegFileMem
 -- Compiling architecture memRegMain of RegFileMem
 
-} {} {}} D:/PROJECTS/ArchPhase1/thirtytwobitadder.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\thirtytwobitadder.vhd}
+} {} {}} D:/PROJECTS/ArchPhase1/thirtytwobitadder.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/thirtytwobitadder.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -119,7 +147,7 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity thirtytwobitsadder
 -- Compiling architecture archh of thirtytwobitsadder
 
-} {} {}} D:/PROJECTS/ArchPhase1/my_adder.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\my_adder.vhd}
+} {} {}} D:/PROJECTS/ArchPhase1/my_adder.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/my_adder.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -127,7 +155,16 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity my_adder
 -- Compiling architecture a_my_adder of my_adder
 
-} {} {}} D:/PROJECTS/ArchPhase1/DecodeExecute.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\DecodeExecute.vhd}
+} {} {}} D:/PROJECTS/ArchPhase1/ExecuteMemoryBuffer.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/ExecuteMemoryBuffer.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity ExecuteMemory
+-- Compiling architecture decExecMemMain of ExecuteMemory
+
+} {} {}} D:/PROJECTS/ArchPhase1/DecodeExecute.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/DecodeExecute.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -135,6 +172,24 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Loading package NUMERIC_STD
 -- Compiling entity DecodeExecute
 -- Compiling architecture decExecRegMain of DecodeExecute
+
+} {} {}} D:/PROJECTS/ArchPhase1/WriteBackStage.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/WriteBackStage.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity WriteBackStage
+-- Compiling architecture wbs of WriteBackStage
+
+} {} {}} D:/PROJECTS/ArchPhase1/ALU_CCR_Integeration.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/ALU_CCR_Integeration.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity ALU_CCR_Integeration
+-- Compiling architecture alu_ccr_arch of ALU_CCR_Integeration
 
 } {} {}} D:/PROJECTS/ArchPhase1/signExtend.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/signExtend.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
@@ -144,15 +199,6 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Loading package NUMERIC_STD
 -- Compiling entity signExtend
 -- Compiling architecture Behavioral of signExtend
-
-} {} {}} D:/PROJECTS/ArchPhase1/ALU_CCR_Integeration.vhd {1 {vcom -work work -2002 -explicit -stats=none {D:\PROJECTS\ArchPhase1\ALU_CCR_Integeration.vhd}
-Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity ALU_CCR_Integeration
--- Compiling architecture alu_ccr_arch of ALU_CCR_Integeration
 
 } {} {}} D:/PROJECTS/ArchPhase1/writeBackReg_1.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/PROJECTS/ArchPhase1/writeBackReg_1.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016

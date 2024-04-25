@@ -1,29 +1,18 @@
 library IEEE; 
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
-
-
+use work.memregisterfile_pkg.all;
 entity processor is
     Port ( 
         clk : in  STD_LOGIC;
         rst : in  STD_LOGIC;
-        PC  : in  STD_LOGIC_VECTOR (31 downto 0);
+        --PC  : in  STD_LOGIC_VECTOR (31 downto 0);
 
-        alu_sel: in  STD_LOGIC_VECTOR (3 downto 0);
-        alu_src: in  std_logic_vector (1 downto 0);
-        flag_enable: in  STD_LOGIC;
-
-        Rsrc1 : in  STD_LOGIC_VECTOR (2 downto 0);
-        Rsrc2 : in  STD_LOGIC_VECTOR (2 downto 0);
-        
-        Rdst: in  STD_LOGIC_VECTOR (2 downto 0);
-        imm: in  signed (15 downto 0);
-        RegWrite1: in  STD_LOGIC;
-        RegWrite2: in  STD_LOGIC;
         inPort: in STD_LOGIC_VECTOR (31 downto 0);
 
-        alu_result: out signed (31 downto 0);
-        flag: out STD_LOGIC_VECTOR (3 downto 0)
+        --alu_result: out signed (31 downto 0);
+        --flag: out STD_LOGIC_VECTOR (3 downto 0);
+        Registers: out vector_array
         );
 
         
@@ -32,10 +21,71 @@ end processor;
 
 architecture Behavioral of processor is
 
-    signal Data1_int, Data2_int, PC_int, outInPort_int: std_logic_vector (31 downto 0);
-    signal immExtended_int : signed (31 downto 0);
+    signal Instruction: std_logic_vector(31 downto 0);
+
+    signal opcode : std_logic_vector (4 downto 0);
+
+    signal Rsrc1 :  STD_LOGIC_VECTOR (2 downto 0);
+    signal Rsrc2 :  STD_LOGIC_VECTOR (2 downto 0);
+    signal Rdst :  STD_LOGIC_VECTOR (2 downto 0);
+
+    signal imm:  signed (15 downto 0);
+
+
+    signal Data1_int, Data2_int, PC_int, outInPort_int, outData1_int, outData2_int: std_logic_vector (31 downto 0);
+    signal immExtended_int: signed (31 downto 0);
+    signal outIMM_int: signed (31 downto 0);
     signal outRsrc1_int, outRdst_int: std_logic_vector (2 downto 0);
 
+    signal alu_sel: std_logic_vector(3 downto 0);
+    signal MemToReg: std_logic_vector(1 downto 0);
+    signal alu_src, flag_enable, RegWrite1, RegWrite2, Regdst, MemWrite, MemRead, SPplus, SPmin, OUTenable, JMP, Z, PROTECT, RET, FlagEnable  : std_logic;
+    signal alu_src_ex: std_logic_vector(1 downto 0);
+    signal RegDst_val: std_logic_vector(2 downto 0);
+    signal outALUresult, ALUresultToWB : signed(31 downto 0);
+    signal data1ToWB : std_logic_vector(31 downto 0);
+    signal WBRegDst : std_logic_vector(2 downto 0);
+    signal flagReg : std_logic_vector(3 downto 0);
+    signal RegMeminDE : std_logic_vector(1 downto 0);--new
+    signal RegMemoutDE :std_logic_vector(1 downto 0);--new
+    signal RegMemoutEM: std_logic_vector(1 downto 0);--new
+    signal RegMemoutMWB: std_logic_vector(1 downto 0);--new
+    signal Reg1WriteEXMEM,Reg2WriteEXMEM,Reg1WriteDE,Reg2WriteDE:std_logic;--new
+    signal FinalReg1Write,FinalReg2Write:std_logic; 
+    signal FinalWrittenData : std_logic_vector(31 downto 0) := (others => '0');
+signal finalDataout : std_logic_vector(31 downto 0) := (others => '0');
+signal finaloutmemoryout: std_logic_vector(31 downto 0) := (others => '0');
+signal FinalIn : std_logic_vector(31 downto 0) := (others => '0');
+signal FinalALU: std_logic_vector(31 downto 0) := (others => '0');
+signal REG_DSToutt: std_logic_vector(2 downto 0) := (others => '0');
+    component controller IS
+    PORT (
+	Reset : IN STD_LOGIC;
+        opCode : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+        RegDist : OUT STD_LOGIC;
+	RegWrite1 : OUT STD_LOGIC;
+	RegWrite2 : OUT STD_LOGIC;
+	ALUsrc : OUT STD_LOGIC;
+	MemWrite : OUT STD_LOGIC;
+	MemRead : OUT STD_LOGIC;
+	MemToReg : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+	SPplus : OUT STD_LOGIC;
+	SPmin : OUT STD_LOGIC; 
+        ALUselector : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        OUTenable : OUT STD_LOGIC;
+	JMP : OUT STD_LOGIC;
+	Z : OUT STD_LOGIC;
+	PROTECT : OUT STD_LOGIC;
+	RET : OUT STD_LOGIC;
+	FlagEnable : OUT STD_LOGIC
+    );
+END component;
+
+component FetchStage is
+    Port ( clk : in STD_LOGIC;
+           reset : in STD_LOGIC;     
+           Instruction : out STD_LOGIC_VECTOR(31 downto 0));
+    End component;
 
     component decode is 
     Port ( 
@@ -48,7 +98,7 @@ architecture Behavioral of processor is
 
         regWrite1 : in STD_LOGIC;
         regWrite2 : in STD_LOGIC;
-
+        
         writeData1 : in STD_LOGIC_VECTOR (31 downto 0);
         writeData2 : in STD_LOGIC_VECTOR (31 downto 0);
         regDst1 : in STD_LOGIC_VECTOR (2 downto 0);
@@ -56,15 +106,38 @@ architecture Behavioral of processor is
 
         immExtended : out  signed (31 downto 0);
         Data1: out STD_LOGIC_VECTOR (31 downto 0);
-        Data2: out STD_LOGIC_VECTOR (31 downto 0)
+        Data2: out STD_LOGIC_VECTOR (31 downto 0);
+        reg: out vector_array
 
     );
     end component;
-
+    component WriteBackStage is Port(
+        clk:in std_logic;
+        rst:in std_logic;
+        Data1in: in std_logic_vector(31 downto 0);
+        Dataoutmemoryin:in std_logic_vector(31 downto 0);
+        ALU_resin:in std_logic_vector(31 downto 0);
+        Reg_dstin: in std_logic_vector(2 downto 0);
+        INin: in std_logic_vector(31 downto 0);
+        MemtoRegin: in std_logic_vector(1 downto 0);
+        Reg1Writein:in std_logic;
+        Reg2Writein:in std_logic;
+        Data1out: out std_logic_vector(31 downto 0);
+        Dataoutmemoryout: out std_logic_vector(31 downto 0);
+        Alu_resout: out std_logic_vector(31 downto 0);
+        Reg_dstout: out std_logic_vector(2 downto 0);
+        INoutput : out std_logic_vector (31 downto 0);
+        MemtoRegout:out std_logic_vector(1 downto 0);
+        Reg1Writeout: out std_logic;
+        Reg2Writeout:out std_logic;  
+        ValueOut: out std_logic_vector(31 downto 0)
+);
+End component;
 
     component DecodeExecute IS
     PORT ( 
         clk : IN STD_LOGIC;
+        rst : IN STD_LOGIC;
         PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         data1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- from reg file
         data2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- from reg file
@@ -72,16 +145,19 @@ architecture Behavioral of processor is
         Rdst : IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- R destination (from F/D)
         IMM: IN signed(31 DOWNTO 0); -- Immediate (from F/D)
         inPort: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- In Instruction
-
-       
-
+        memtoregin: in std_logic_vector(1 downto 0);
+        Reg1Writein,Reg2Writein: in std_logic;
+        
         outPC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --PC to Ex/Mem
         outData1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);--to ALU & Ex/Mem
         outData2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & ALU
         outRsrc1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0); --to mux & Ex/Mem
         outRdst : OUT STD_LOGIC_VECTOR(2 DOWNTO 0); --to mux & Ex/Mem
         outIMM: OUT signed(31 DOWNTO 0); --to mux & ALU
-        outInPort: OUT STD_LOGIC_VECTOR(31 DOWNTO 0) --to Ex/Mem
+        outInPort: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        memtoregout: out std_logic_vector(1 downto 0);
+        Reg1WriteOut:out std_logic;
+        Reg2WriteOut:out std_logic
     );
 
     END component;
@@ -97,14 +173,82 @@ architecture Behavioral of processor is
             alu_sel:in std_logic_vector(3 downto 0);
             alu_src:in std_logic_vector(1 downto 0);
             flag_enable: in std_logic;
-    
-    
             Output:out signed(31 downto 0);
             flagReg:out std_logic_vector(3 downto 0)
         );
+
     end component;
 
+    component mux2bits IS 
+	Generic ( n : Integer:=32);
+	PORT ( in0,in1 : IN std_logic_vector (n-1 DOWNTO 0);
+		sel : IN  std_logic;
+		out1 : OUT std_logic_vector (n-1 DOWNTO 0));
+    END component;
+
+    component ExecuteMemory IS
+    PORT ( 
+        clk : IN STD_LOGIC;
+        rst : IN STD_LOGIC;
+
+        PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        data1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        alu_result: IN signed(31 downto 0);
+        flag: IN STD_LOGIC_VECTOR(3 downto 0);
+        RegDst : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        inPort: IN STD_LOGIC_VECTOR(31 DOWNTO 0); -- In Instruction
+        RegMemin :IN std_logic_vector(1 downto 0);
+        Reg1Writein,Reg2Writein:std_logic; 
+       
+
+        outPC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        outWriteData : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        outData1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        outALUresult : OUT signed(31 DOWNTO 0); 
+        outRegDst : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        outInPort: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        RegMemOut: OUT std_logic_vector(1 downto 0);
+        Reg1Writeout:out std_logic;
+        Reg2Writeout:out std_logic
+    );
+
+END component;
+
     begin
+
+        fetch1: FetchStage Port map ( clk => clk,
+        reset => rst,
+        Instruction => Instruction
+        );
+
+        opcode<=Instruction(15 downto 11);
+        Rsrc1<=Instruction(10 downto 8);
+        Rsrc2<=Instruction(7 downto 5);
+        Rdst<=Instruction(4 downto 2);
+        imm<=signed(Instruction(31 downto 16));
+
+        controller1: controller port map(
+            Reset => rst,
+            opCode => opcode,
+            RegDist => Regdst,
+        RegWrite1 => RegWrite1,
+        RegWrite2 => RegWrite2,
+        ALUsrc => alu_src,
+        MemWrite => MemWrite,
+        MemRead => MemRead,
+        MemToReg => MemToReg,
+        SPplus => SPplus,
+        SPmin => SPmin,
+            ALUselector => alu_sel,
+            OUTenable => OUTenable,
+        JMP => JMP,
+        Z => Z,
+        PROTECT => PROTECT,
+        RET => RET,
+        FlagEnable => flag_enable 
+        );
+
+
         decode1: decode port map(
             clk => clk,
             reset => rst,
@@ -114,31 +258,41 @@ architecture Behavioral of processor is
             imm => imm,
             regWrite1 => RegWrite1,
             regWrite2 => RegWrite2,
-            writeData1 => inPort,
-            writeData2 => inPort,
+            writeData1 => FinalWrittenData,
+            writeData2 => (others =>'0'),
             regDst1 => Rdst,
             immExtended => immExtended_int,
             Data1 => Data1_int,
-            Data2 => Data2_int
+            Data2 => Data2_int,
+            reg => Registers
         );
 
         decodeExecute1: DecodeExecute port map(
             clk => clk,
-            PC => PC,
+            rst => rst,
+            PC => PC_int,
             data1 => Data1_int,
             data2 => Data2_int,
             Rsrc1 => Rsrc1,
             Rdst => Rdst,
-            IMM => immExtended,
+            IMM => immExtended_int,
             inPort => inPort,
+            memtoregin=>RegMeminDE,
+            Reg1Writein =>RegWrite1,
+            Reg2Writein=>RegWrite2,
             outPC => PC_int,
-            outData1 => Data1_int,
-            outData2 => Data2_int,
+            outData1 => outData1_int,
+            outData2 => outData2_int,
             outRsrc1 => outRsrc1_int,
             outRdst => outRdst_int,
-            outIMM => immExtended_int,
-            outInPort => outInPort_int
+            outIMM => outIMM_int,
+            outInPort => outInPort_int,
+            memtoregout =>RegMemoutDE,
+            Reg1WriteOut=>Reg1WriteDE ,
+            Reg2WriteOut =>Reg2WriteDE
         );
+
+        alu_src_ex <= '0' & alu_src;
 
         execute1: Execute port map(
             clk => clk,
@@ -146,12 +300,62 @@ architecture Behavioral of processor is
             A => signed(Data1_int),
             data2 => signed(Data2_int),
             imm => immExtended_int,
-            alu_sel => alu_sel,
-            alu_src => alu_src,
+            alu_sel =>  alu_sel,
+            alu_src => alu_src_ex,
             flag_enable => flag_enable,
-            Output => alu_result,
+            Output => outALUresult,
             flagReg => flag
         );
-        
+
+        mux1: mux2bits generic map(3) port map(
+            in0 => Rsrc1, 
+            in1 => Rdst,
+		    sel => Regdst,
+		    out1 => RegDst_val
+        );
+
+        executeMemory1: ExecuteMemory port map(
+        clk => clk,
+        rst => rst,
+        PC => PC_int,
+        data1  => outData1_int,
+        alu_result => outALUresult,
+        flag => flagReg,
+        RegDst => RegDst_val,
+        inPort => outInPort_int, -- In Instruction
+        RegMemin =>RegMemoutDE ,
+        Reg1Writein =>Reg1WriteDE ,
+        Reg2Writein =>Reg2WriteDE ,
+        outPC => PC_int,
+        outWriteData => data1ToWB,
+        outData1 => data1ToWB,
+        outALUresult => ALUresultToWB, 
+        outRegDst => WBRegDst,
+        outInPort => outInPort_int,
+        RegMemOut => RegMemoutEM,
+        Reg1Writeout => reg1WriteEXMEM,
+        Reg2Writeout => reg2WriteEXMEM
+        );
+    wb: WriteBackStage port Map(
+        clk=> clk,
+        rst=> rst,
+        Data1in =>data1ToWB,
+        Dataoutmemoryin=>(others=>'0'),
+        ALU_resin=>std_logic_vector(AlUresultToWB),
+        Reg_dstin=>WBRegDst,
+        INin =>outInPort_int,
+        MemtoRegin=>RegMemoutEM,
+        Reg1Writein => reg1WriteEXMEM,
+        Reg2Writein => reg2WriteEXMEM,
+        Data1out => finalDataout,
+        Dataoutmemoryout=> finaloutmemoryout ,
+        Alu_resout => FinalALU,
+        Reg_dstout => REG_DSToutt,
+        INoutput => FinalIn,
+        MemtoRegout =>RegMemoutMWB,
+        Reg1Writeout =>FinalReg1Write,
+        Reg2Writeout =>FinalReg2Write, 
+        ValueOut =>FinalWrittenData
+    );    
 end Behavioral;
         
