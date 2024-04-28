@@ -10,8 +10,8 @@ entity processor is
 
         inPort: in STD_LOGIC_VECTOR (31 downto 0);
 
-        --alu_result: out signed (31 downto 0);
-        --flag: out STD_LOGIC_VECTOR (3 downto 0);
+        alu_result: out signed (31 downto 0);
+        flag: out STD_LOGIC_VECTOR (3 downto 0);
         Registers: out vector_array
         );
 
@@ -33,10 +33,9 @@ architecture Behavioral of processor is
 
 
     signal Data1_int, Data2_int, PC_int, outInPort_int, outData1_int, outData2_int: std_logic_vector (31 downto 0);
-    signal immExtended_int: signed (31 downto 0);
+    signal immExtended_int: unsigned (31 downto 0);
     signal outIMM_int: signed (31 downto 0);
     signal outRsrc1_int, outRdst_int: std_logic_vector (2 downto 0);
-
     signal alu_sel: std_logic_vector(3 downto 0);
     signal MemToReg: std_logic_vector(1 downto 0);
     signal alu_src, flag_enable, RegWrite1, RegWrite2, Regdst, MemWrite, MemRead, SPplus, SPmin, OUTenable, JMP, Z, PROTECT, RET, FlagEnable  : std_logic;
@@ -46,7 +45,6 @@ architecture Behavioral of processor is
     signal data1ToWB : std_logic_vector(31 downto 0);
     signal WBRegDst : std_logic_vector(2 downto 0);
     signal flagReg : std_logic_vector(3 downto 0);
-    signal RegMeminDE : std_logic_vector(1 downto 0);--new
     signal RegMemoutDE :std_logic_vector(1 downto 0);--new
     signal RegMemoutEM: std_logic_vector(1 downto 0);--new
     signal RegMemoutMWB: std_logic_vector(1 downto 0);--new
@@ -104,7 +102,7 @@ component FetchStage is
         regDst1 : in STD_LOGIC_VECTOR (2 downto 0);
 
 
-        immExtended : out  signed (31 downto 0);
+        immExtended : out  unsigned (31 downto 0);
         Data1: out STD_LOGIC_VECTOR (31 downto 0);
         Data2: out STD_LOGIC_VECTOR (31 downto 0);
         reg: out vector_array
@@ -208,7 +206,7 @@ End component;
         outRegDst : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
         outInPort: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
         RegMemOut: OUT std_logic_vector(1 downto 0);
-        Reg1Writeout:out std_logic;
+        Reg1Writeout:out std_logic; 
         Reg2Writeout:out std_logic
     );
 
@@ -226,6 +224,7 @@ END component;
         Rsrc2<=Instruction(7 downto 5);
         Rdst<=Instruction(4 downto 2);
         imm<=signed(Instruction(31 downto 16));
+
 
         controller1: controller port map(
             Reset => rst,
@@ -254,7 +253,7 @@ END component;
             reset => rst,
             Rsrc1 => Rsrc1,
             Rsrc2 => Rsrc2,
-            Rdst => Rdst,
+            Rdst => REG_DSToutt,
             imm => imm,
             regWrite1 => RegWrite1,
             regWrite2 => RegWrite2,
@@ -275,9 +274,9 @@ END component;
             data2 => Data2_int,
             Rsrc1 => Rsrc1,
             Rdst => Rdst,
-            IMM => immExtended_int,
+            IMM => signed(immExtended_int),
             inPort => inPort,
-            memtoregin=>RegMeminDE,
+            memtoregin=>MemToReg,
             Reg1Writein =>RegWrite1,
             Reg2Writein=>RegWrite2,
             outPC => PC_int,
@@ -299,7 +298,7 @@ END component;
             reset => rst,
             A => signed(Data1_int),
             data2 => signed(Data2_int),
-            imm => immExtended_int,
+            imm => signed(immExtended_int),
             alu_sel =>  alu_sel,
             alu_src => alu_src_ex,
             flag_enable => flag_enable,
