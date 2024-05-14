@@ -1,0 +1,3 @@
+﻿  Source.cpp
+D:\Assembler 2\Assembler\Source.cpp(28): warning C4715: 'GetAddress': not all control paths return a value
+  Assembler.vcxproj -> D:\Assembler 2\Assembler\x64\Debug\Assembler.exe

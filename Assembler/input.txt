@@ -1,0 +1,11 @@
+.ORG 22
+add r5,r6,r7
+inc r0
+inc r1
+.ORG 44
+add r1,r2,r3
+.ORG 55
+PROTECT r1
+xOr r1,r4,r2
+.ORG 120
+Add r1,r4,r2
