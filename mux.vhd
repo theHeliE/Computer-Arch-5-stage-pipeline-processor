@@ -8,17 +8,6 @@ ENTITY mux_generic IS
 			out1 : OUT std_logic_vector (n-1 DOWNTO 0));
 END mux_generic;
 
-
-ARCHITECTURE when_else_mux OF mux_generic is
-	BEGIN
-		
-  out1 <= 	in0 when sel = "00"
-	else	in1 when sel = "01"
-	else	in2 when sel = "10"
-	else 	in3; 
-END when_else_mux;
-
-
 ARCHITECTURE with_select_mux OF mux_generic is
 	BEGIN
 		

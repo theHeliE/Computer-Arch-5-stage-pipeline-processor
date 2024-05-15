@@ -1,0 +1,39 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.numeric_std.all;
+
+ENTITY dataMem IS
+	PORT(
+		clk                     : IN std_logic;
+        rst                     : IN std_logic;
+        readEnable              : IN std_logic;
+        readAddress             : IN  std_logic_vector(31 DOWNTO 0);
+		writeEnable             : IN std_logic;
+		writeAddress            : IN  std_logic_vector(31 DOWNTO 0);
+		writeData1              : IN  std_logic_vector(15 DOWNTO 0);
+        writeData2              : IN std_logic_vector(15 DOWNTO 0);
+		readData1               : OUT std_logic_vector(15 DOWNTO 0);
+        readData2               : OUT std_logic_vector(15 DOWNTO 0)
+        );
+END ENTITY dataMem;
+
+ARCHITECTURE archMem OF dataMem IS
+
+	TYPE ram_type IS ARRAY(0 TO (2**12)-1) OF std_logic_vector(15 DOWNTO 0);
+	SIGNAL ram : ram_type ;
+	
+	BEGIN
+		PROCESS(clk,rst) IS
+			BEGIN
+                IF rst = '1' THEN
+                    ram <= (OTHERS => (OTHERS => '0'));
+				ELSIF rising_edge(clk) AND writeEnable = '1' THEN 
+						ram(to_integer(unsigned(writeAddress))) <= writeData1;
+                        ram(to_integer(unsigned(writeAddress)+1)) <= writeData2;
+				END IF;
+		END PROCESS;
+		readData1 <= ram(to_integer(unsigned(readAddress))) WHEN readEnable = '1' 
+        readData2 <= ram(to_integer(unsigned(readAddress)+1)) WHEN readEnable = '1'
+        ELSE (OTHERS => '0');
+END archMem;
+

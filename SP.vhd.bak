@@ -1,0 +1,30 @@
+Library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.all;
+
+entity SP is
+    port(
+        clk : in std_logic;
+        rst : in std_logic;
+        add : in std_logic_vector(2 downto 0); --can be 2, 0 or -2
+
+        SP  : out std_logic_vector(31 downto 0); --SP
+    );
+end entity SP;
+
+architecture behavioral of SP is
+    begin
+        process(clk, rst)
+        variable SPtemp : in std_logic_vector(31 downto 0);
+        begin
+            if rst = '1' then
+                SP <="00000000000000000000111111111111";
+                SPtemp := (others => '0');
+            else
+                if rising_edge(clk) then
+                    SPtemp := std_logic_vector(signed(SPtemp) + signed(add));
+                    SP<=SPtemp;
+                end if;
+            end if;
+        end process
+end architecture

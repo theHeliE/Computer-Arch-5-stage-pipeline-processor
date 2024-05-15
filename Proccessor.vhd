@@ -38,7 +38,7 @@ architecture Behavioral of processor is
     signal outRsrc1_int, outRdst_int: std_logic_vector (2 downto 0);
     signal alu_sel: std_logic_vector(3 downto 0);
     signal MemToReg: std_logic_vector(1 downto 0);
-    signal alu_src, flag_enable, RegWrite1, RegWrite2, Regdst, MemWrite, MemRead, SPplus, SPmin, OUTenable, JMP, Z, PROTECT, RE: std_logic;
+    signal alu_src, flag_enable, RegWrite1, RegWrite2, Regdst, MemWrite, MemRead, SPplus, SPmin, OUTenable, JMP, Z, PROTECT, RET: std_logic;
     signal alu_src_ex: std_logic_vector(1 downto 0);
     signal RegDst_val: std_logic_vector(2 downto 0);
     signal outALUresult, ALUresultToWB : signed(31 downto 0);
