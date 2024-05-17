@@ -9,13 +9,12 @@ entity MemoryStage is
         PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         WriteData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         UC: IN STD_LOGIC;
-
+        PROTECT: IN STD_LOGIC;
+        FREEsig: IN STD_LOGIC;
         WriteEnable : IN STD_LOGIC;
         readEnable : IN STD_LOGIC;
 
         ALUresult : IN signed(31 DOWNTO 0); 
-        SPold : IN std_logic_vector(31 DOWNTO 0);
-        SPnew : IN std_logic_vector(31 DOWNTO 0);
         SPminus: IN std_logic;
         SPplus: IN std_logic;
         
@@ -25,13 +24,6 @@ entity MemoryStage is
 end entity;
 
 architecture archMemory of MemoryStage is
-    signal readAddress : std_logic_vector(31 DOWNTO 0); 
-    signal writeAddress : std_logic_vector(31 DOWNTO 0);
-
-    signal SPnew_int : IN std_logic_vector(31 DOWNTO 0);
-    signal SPold_int : IN std_logic_vector(31 DOWNTO 0);
-    signal add_int   : IN std_logic_vector(2 downto 0);
-    signal alu_result_int : IN std_logic_vector(31 DOWNTO 0);
 
     component SP is port (
         clk : in std_logic;
@@ -66,28 +58,53 @@ architecture archMemory of MemoryStage is
 		writeEnable      : IN std_logic;
 		writeAddress     : IN  std_logic_vector(31 DOWNTO 0);
 		writeData        : IN  std_logic_vector(31 DOWNTO 0);
+		protectSignal 	 : IN std_logic;
+		freeSignal       : IN std_logic;
 		readData         : OUT std_logic_vector(31 DOWNTO 0));
     END component;
+    signal MemAddress : std_logic_vector(31 DOWNTO 0):=(others=>'0'); 
+    signal SPnew_int :  std_logic_vector(31 DOWNTO 0):=(others=>'0');
+    signal SPold_int :  std_logic_vector(31 DOWNTO 0):=(others=>'0');
+    signal add_int   :  std_logic_vector(2 downto 0):=(others=>'0');
+    signal alu_result_int :  signed(31 DOWNTO 0):=(others=>'0');
+    signal selection_option : std_logic_Vector(1 downto 0):=(others=>'0');
 begin
-    SPnew_int <= SPnew;
-    SPold_int <= SPold;
-    alu_result_int <= alu_result;
-    add_int <= add;
-    
+    alu_result_int <= ALUresult;
+    selection_option(0)<=SPplus;
+    selection_option(1)<=SPminus;
     mux1: mux_generic generic map(3) port map(
-        in0 => SPold_int,
-        in1 => SPnew_int,
-        in2 => alu_result_int,
-        in3 => to_signed(0,32),
-        sel => SPminus & SPplus,
+        in0 => "000",
+        in1 => "010",
+        in2 => "110",
+        in3 => "000",
+        sel => selection_option,
         out1 => add_int
-    );
-    sp: SP port map(
+    ); 
+    sp1: SP port map(
         clk => clk,
         rst => rst,
-        add => "000",
+        add => add_int,
         SPnew => SPnew_int,
         SPold => SPold_int
     );
-    
+    mux2: mux_generic generic map(32) port map(
+        in0=> std_logic_vector(alu_result_int),
+        in1=>SPold_int,
+        in2=>SPnew_int,
+        in3=>(others=>'0'),
+        sel=>selection_option,
+        out1 =>MemAddress
+    );
+     datamemory : datamem port map(
+        clk => clk,
+        rst => rst,
+        readEnable => readEnable,
+        readAddress => MemAddress,
+        writeEnable => writeEnable,
+        writeAddress => MemAddress,
+        writeData => WriteData,
+        protectSignal => PROTECT,
+        freeSignal => FREEsig,
+        readData => readData
+     );
 end archMemory;

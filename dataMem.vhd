@@ -11,6 +11,8 @@ ENTITY dataMem IS
 		writeEnable      : IN std_logic;
 		writeAddress     : IN  std_logic_vector(31 DOWNTO 0);
 		writeData        : IN  std_logic_vector(31 DOWNTO 0);
+		protectSignal 	 : IN std_logic;
+		freeSignal       : IN std_logic;
 		readData         : OUT std_logic_vector(31 DOWNTO 0));
 END ENTITY dataMem;
 
@@ -19,12 +21,20 @@ ARCHITECTURE archMem OF dataMem IS
 	TYPE ram_type IS ARRAY(0 TO (2**12)-1) OF std_logic_vector(15 DOWNTO 0);
 	SIGNAL ram : ram_type ;
 	
+	TYPE protect_type IS ARRAY(0 TO (2**12)-1) OF std_logic;
+	SIGNAL protect : protect_type;
+
 	BEGIN
 		PROCESS(clk,rst) IS
 			BEGIN
                 IF rst = '1' THEN
                     ram <= (OTHERS => (OTHERS => '0'));
-				ELSIF rising_edge(clk) AND writeEnable = '1' THEN 
+					protect <= (OTHERS => '0');
+				ELSIF rising_edge(clk) AND protectSignal = '1' THEN
+				    protect(to_integer(unsigned(writeAddress))) <= '1';
+				ELSIF rising_edge(clk) AND freeSignal = '1' THEN
+				    protect(to_integer(unsigned(writeAddress))) <= '0';
+				ELSIF rising_edge(clk) AND writeEnable = '1' AND protect(to_integer(unsigned(writeAddress)))='0' AND protect(to_integer(unsigned(writeAddress)+1))='0' THEN 
 						ram(to_integer(unsigned(writeAddress))) <= writeData(15 downto 0);
                         ram(to_integer(unsigned(writeAddress)+1)) <= writeData(31 downto 16);
 				END IF;

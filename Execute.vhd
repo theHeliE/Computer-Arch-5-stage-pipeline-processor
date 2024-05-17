@@ -62,10 +62,10 @@ end component;
             ALU_out => alu_result,
             sel => alu_sel,
             flag_enable => flag_enable,
-            zero_flag => alu_flag(0),
-            carry_flag => alu_flag(1),
-            overflow_flag => alu_flag(2),
-            negative_flag => alu_flag(3)
+            zero_flag => alu_flag(3),
+            carry_flag => alu_flag(0),
+            overflow_flag => alu_flag(1),
+            negative_flag => alu_flag(2)
         );
 
 

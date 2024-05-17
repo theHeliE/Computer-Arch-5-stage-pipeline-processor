@@ -14,6 +14,7 @@ ENTITY MemoryWriteBack is
         MemtoRegin: in std_logic_vector(1 downto 0);
         Reg1Writein:in std_logic;
         Reg2Writein:in std_logic;
+        OUTenablein : in std_logic;
         Data1out: out std_logic_vector(31 downto 0);
         Dataoutmemoryout: out std_logic_vector(31 downto 0);
         Alu_resout: out std_logic_vector(31 downto 0);
@@ -21,7 +22,8 @@ ENTITY MemoryWriteBack is
         INoutput : out std_logic_vector (31 downto 0);
         MemtoRegout:out std_logic_vector(1 downto 0);
         Reg1Writeout: out std_logic;
-        Reg2Writeout:out std_logic    
+        Reg2Writeout:out std_logic;
+        OUTenableout: out std_logic
     );
     END MemoryWriteBack;
 
@@ -37,8 +39,9 @@ ENTITY MemoryWriteBack is
             Inoutput<=(others=>'0');
             MemtoRegout<=(others=>'0');
             Reg1Writeout<='0';
-            Reg2Writeout<='0';    
-        elsif rising_edge(clk) then
+            Reg2Writeout<='0'; 
+            OUTenableout<='0';
+        elsif falling_edge(clk) then
             Data1out<=Data1in;
             Dataoutmemoryout<=Dataoutmemoryin;
             Alu_resout<=Alu_resin;
@@ -47,6 +50,7 @@ ENTITY MemoryWriteBack is
             MemtoRegout<=MemtoRegin;
             Reg1Writeout<=Reg1Writein;
             Reg2Writeout<=Reg2Writein;
+            OUTenableout<=OUTenablein;
        end if;
        end process;
        end architecture;

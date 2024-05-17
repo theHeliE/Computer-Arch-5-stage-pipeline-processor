@@ -15,13 +15,15 @@ ENTITY controller IS
 	MemToReg : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
 	SPplus : OUT STD_LOGIC;
 	SPmin : OUT STD_LOGIC; 
-        ALUselector : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        OUTenable : OUT STD_LOGIC;
+    ALUselector : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    OUTenable : OUT STD_LOGIC;
 	JMP : OUT STD_LOGIC;
 	Z : OUT STD_LOGIC;
 	PROTECT : OUT STD_LOGIC;
 	RET : OUT STD_LOGIC;
-	FlagEnable : OUT STD_LOGIC
+	FlagEnable : OUT STD_LOGIC;
+	FREE: OUT STD_LOGIC;
+	UC :OUT std_logic
     );
 END controller;
 
@@ -168,6 +170,8 @@ FlagEnable <= '0' WHEN Reset = '1' ELSE
 	'1' WHEN opCode = "10000" ELSE --CMP	
 	'1' WHEN opCode = "11100" ELSE --RTI	
 	'0';
-
-
+FREE<='0' WHEN Reset='1' else
+	'1' WHEN opCode="10111" else --FREE
+	'0';
+UC<='0';
 END controllerMain;

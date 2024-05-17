@@ -13,6 +13,7 @@ Entity WriteBackStage is Port(
         MemtoRegin: in std_logic_vector(1 downto 0);
         Reg1Writein:in std_logic;
         Reg2Writein:in std_logic;
+        OUTenablein: in std_logic;
         Data1out: out std_logic_vector(31 downto 0);
         Dataoutmemoryout: out std_logic_vector(31 downto 0);
         Alu_resout: out std_logic_vector(31 downto 0);
@@ -21,6 +22,7 @@ Entity WriteBackStage is Port(
         MemtoRegout:out std_logic_vector(1 downto 0);
         Reg1Writeout: out std_logic;
         Reg2Writeout:out std_logic;  
+        OUTenableout: out std_logic;
         ValueOut: out std_logic_vector(31 downto 0)
 );
 End WriteBackStage;
@@ -38,6 +40,7 @@ component MemoryWriteBack is
         MemtoRegin: in std_logic_vector(1 downto 0);
         Reg1Writein:in std_logic;
         Reg2Writein:in std_logic;
+        OUTenablein : in std_logic;
         Data1out: out std_logic_vector(31 downto 0);
         Dataoutmemoryout: out std_logic_vector(31 downto 0);
         Alu_resout: out std_logic_vector(31 downto 0);
@@ -45,7 +48,8 @@ component MemoryWriteBack is
         INoutput : out std_logic_vector (31 downto 0);
         MemtoRegout:out std_logic_vector(1 downto 0);
         Reg1Writeout: out std_logic;
-        Reg2Writeout:out std_logic
+        Reg2Writeout:out std_logic;
+        OUTenableout: out std_logic
     );
     END component;
     component  mux_generic IS 
@@ -70,6 +74,7 @@ begin
         MemtoRegin => MemtoRegin,
         Reg1Writein => Reg1Writein,
         Reg2Writein => Reg2Writein,
+        OUTenablein => OUTenablein,
         Data1out => Data1out,
         Dataoutmemoryout => dataoutmem,
         Alu_resout => aluresult,
@@ -77,7 +82,8 @@ begin
         INoutput => INoutp,
         MemtoRegout => MemtoRegister,
         Reg1Writeout => Reg1Writeout,
-        Reg2Writeout => Reg2Writeout
+        Reg2Writeout => Reg2Writeout,
+        OUTenableout => OUTenableout
     );
 mu: mux_generic GENERIC MAP(32) PORT MAP(
 in0=>aluresult,
