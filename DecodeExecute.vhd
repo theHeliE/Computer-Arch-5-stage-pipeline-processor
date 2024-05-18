@@ -27,6 +27,8 @@ ENTITY DecodeExecute IS
         Freein : in std_logic;
         UCin : in std_logic;
         PROTECTEDin: in std_logic;
+        JMPin: in std_logic;
+        Zin: in std_logic;
         outPC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --PC to Ex/Mem
         outData1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);--to ALU & Ex/Mem
         outData2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & ALU
@@ -48,7 +50,9 @@ ENTITY DecodeExecute IS
         FlagEnableout : out std_logic;
         Freeout : out std_logic;
         UCout: out std_logic;
-        PROTECTEDout: out std_logic
+        PROTECTEDout: out std_logic;
+        JMPoutp: out std_logic;
+        Zout: out std_logic
     );
 
 END ENTITY DecodeExecute;
@@ -80,6 +84,8 @@ BEGIN
     Freeout<='0';
     UCout<='0';
     PROTECTEDout<='0';
+    JMPoutp<='0';
+    Zout<='0';
 ELSIF falling_edge(clk) THEN
     outPC <= PC;
     outData1 <= data1;
@@ -103,6 +109,8 @@ ELSIF falling_edge(clk) THEN
     Freeout<=Freein;
     UCout<=UCin;
     PROTECTEDout<=PROTECTEDin;
+    JMPoutp<=JMPin;
+    Zout<=Zin;
 END IF;
     END PROCESS;
 END decExecRegMain;

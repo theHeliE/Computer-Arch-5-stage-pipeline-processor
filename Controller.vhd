@@ -173,5 +173,11 @@ FlagEnable <= '0' WHEN Reset = '1' ELSE
 FREE<='0' WHEN Reset='1' else
 	'1' WHEN opCode="10111" else --FREE
 	'0';
-UC<='0';
+UC<= '0' WHEN Reset = '1' ELSE
+'1' WHEN opCode = "11000" ELSE --JZ	
+'1' WHEN opCode = "11001" ELSE --JMP	
+'1' WHEN opCode = "11010" ELSE --CALL	
+'1' WHEN opCode = "11011" ELSE --RET	
+'1' WHEN opCode = "11100" ELSE --RTI	
+'0';
 END controllerMain;

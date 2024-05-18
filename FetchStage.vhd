@@ -4,7 +4,9 @@ USE IEEE.NUMERIC_STD.ALL;
 Entity FetchStage is
     Port ( clk : in STD_LOGIC;
            reset : in STD_LOGIC;      
-           Instruction : out STD_LOGIC_VECTOR(31 downto 0));
+           Instruction : out STD_LOGIC_VECTOR(31 downto 0);
+           PCout : out STD_LOGIC_VECTOR(31 downto 0)
+           );
 End FetchStage;
 Architecture Fetch of FetchStage is 
 component NewPC IS
@@ -61,4 +63,5 @@ end component;
         immediatein =>Immediate_reg,
         Externalbuffer => Instruction
     );
+    PCout <= PC_reg;
 end Fetch;

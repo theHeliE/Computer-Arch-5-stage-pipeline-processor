@@ -3,16 +3,15 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.ALL;
 
 ENTITY BranchHandling IS
-    PORT (
-
-        reset : IN STD_LOGIC;
-        Execute_Read_Data1, Execute_Pc_incremented, Decode_Read_Data1, Pop_Data, PC_incremented : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        decode_UC_sig, decode_z_sig, execute_z_sig, zeroFlag, RET, Flushed : IN STD_LOGIC;
-        --decode_z_sig: for branch predict ****** execute_z_sig : for pc 
-        Final_PC : out std_logic_vector(31 downto 0);    
-        WrongState : out std_logic_vector(1 downto 0);
-        PredictedBranch : out std_logic
-        );
+PORT (
+    reset : IN STD_LOGIC;
+    Exec_Read_Data1, Exec_Pc_incremented, Dec_Read_Data1, Popped_Data, PC_increment : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    dec_UC_sig, dec_z_sig, exe_z_sig, zeroFlagg, RETT : IN STD_LOGIC;
+    --decode_z_sig: for branch predict ****** execute_z_sig : for pc 
+    Final_Branch_Ret : out std_logic_vector(31 downto 0);  
+    WrongState : out std_logic_vector(1 downto 0);
+    PredictedBranch : out std_logic  
+    );
 END ENTITY;
 
 ARCHITECTURE BArch OF BranchHandling IS
@@ -51,14 +50,13 @@ ARCHITECTURE BArch OF BranchHandling IS
     END COMPONENT;
 BEGIN
 
-    Branch_Prediction : BranchPredict PORT MAP(reset, decode_z_sig, zeroFlag, branch_S, Predict_State);
-    WrongPredictionFix : mux_generic PORT MAP(Execute_Read_Data1, Execute_Read_Data1, Execute_Pc_incremented, Execute_Pc_incremented, predict_state, PredictionFixedAddress);
-    Prediction : mux2bits PORT MAP(PC_incremented, Decode_Read_Data1, branch_S, PredictedAddress);
-    Unconditional : mux2bits PORT MAP(PredictedAddress, Decode_Read_Data1, Decode_UC_sig, BranchDecodeAddress);
-    PC_state <= (predict_state(1) XOR predict_state(0)) AND execute_z_sig;
+    Branch_Prediction : BranchPredict PORT MAP(reset, dec_z_sig, zeroFlagg, branch_S, Predict_State);
+    WrongPredictionFix : mux_generic PORT MAP(Exec_Read_Data1, Exec_Read_Data1, Exec_Pc_incremented, Exec_Pc_incremented, predict_state, PredictionFixedAddress);
+    Prediction : mux2bits PORT MAP(PC_increment, Dec_Read_Data1, branch_S, PredictedAddress);
+    Unconditional : mux2bits PORT MAP(PredictedAddress, Dec_Read_Data1, Dec_UC_sig, BranchDecodeAddress);
+    PC_state <= (predict_state(1) XOR predict_state(0)) AND exe_z_sig;
     BranchAddress : mux2bits PORT MAP(BranchDecodeAddress, PredictionFixedAddress, PC_state, FinalBranch);
-    Final_Branch : mux2bits PORT MAP(FinalBranch, Pop_Data, RET, FinalBranchOrReturn);
-    FinallPC : mux2bits port map (Pc_incremented, FinalBranchOrReturn, Flushed, Final_PC);
+    Final_Branch : mux2bits PORT MAP(FinalBranch, Popped_Data, RETT, FinalBranchOrReturn);
     WrongState <= predict_state;
     PredictedBranch <= branch_s;
 END ARCHITECTURE BArch;

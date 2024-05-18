@@ -69,6 +69,9 @@ signal wrongPrediction_int : std_logic_vector(1 downto 0);
 signal BranchPredict_int : std_logic;
 signal decode_JMP_int, decode_z_sig_int, exec_z_sig_int, decode_UC_sig_int, MEM_RET_int : std_logic;
 signal Flushed_int, ResetFetchDecode_int, ResetDecodeExecute_int, ResetExecuteMemory_int, ResetControl_int : std_logic;
+signal PCexec, PCorigin : std_logic_vector(31 downto 0);
+signal ZoutDE, JMPoutDE : std_logic;
+
 
     component controller IS
     PORT (
@@ -98,7 +101,8 @@ END component;
 component FetchStage is
     Port ( clk : in STD_LOGIC;
            reset : in STD_LOGIC;     
-           Instruction : out STD_LOGIC_VECTOR(31 downto 0));
+           Instruction : out STD_LOGIC_VECTOR(31 downto 0);
+           PCout : out STD_LOGIC_VECTOR(31 downto 0));
     End component;
 
     component OUTREG is port(
@@ -184,6 +188,8 @@ End component;
         Freein : in std_logic;
         UCin : in std_logic;
         PROTECTEDin: in std_logic;
+        JMPin: in std_logic;
+        Zin: in std_logic;
         outPC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --PC to Ex/Mem
         outData1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);--to ALU & Ex/Mem
         outData2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); --to mux & ALU
@@ -205,7 +211,9 @@ End component;
         FlagEnableout : out std_logic;
         Freeout : out std_logic;
         UCout: out std_logic;
-        PROTECTEDout: out std_logic
+        PROTECTEDout: out std_logic;
+        JMPoutp: out std_logic;
+        Zout: out std_logic
     );
 
     END component;
@@ -240,6 +248,16 @@ End component;
 		out1 : OUT std_logic_vector (n-1 DOWNTO 0));
     END component;
     
+    COMPONENT BranchFinal IS
+    PORT (
+        reset, clock : IN STD_LOGIC;
+        Execute_Read_Data1, Execute_Pc_incremented, Decode_Read_Data1, Pop_Data, PC_incremented : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        decode_UC_signal, decode_z_signal, execute_z_signal, zeroFlag, decodeJMP, MemRET : IN STD_LOGIC;
+        Final_PC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        ResetFetchDecode, ResetDecodeExecute, ResetExecuteMemory, ResetControl : OUT STD_LOGIC
+    );
+    END COMPONENT;
+
     component ExecuteMemory IS
     PORT ( 
         clk : IN STD_LOGIC;
@@ -324,12 +342,58 @@ End component;
         readData: OUT std_logic_vector(31 downto 0)
     );
 END component;
-
+signal reset_signalFD : std_logic;
+signal reset_signalDE : std_logic;
+signal reset_signalEM : std_logic;
 
     begin
+
+        process(clk)
+        begin
+            if rising_edge(clk) then
+                reset_signalFD <= rst or ResetFetchDecode_int;
+            end if;
+        end process;
+
+        process(clk)
+        begin
+            if rising_edge(clk) then
+                reset_signalDE <= rst or ResetDecodeExecute_int;
+            end if;
+        end process;
+
+        process(clk)
+        begin
+            if rising_edge(clk) then
+                reset_signalEM <= rst or ResetExecuteMemory_int;
+            end if;
+        end process;
+
+        branch1: BranchFinal port map(
+            clock => clk,
+            reset => rst,
+            Execute_Read_Data1 => outData1_int,
+            Execute_Pc_incremented => PCexec,
+            Decode_Read_Data1 => Data1_int,
+            Pop_data => finaloutmemoryout,
+            PC_incremented => PCorigin,
+            decode_UC_signal => UC_inDE,
+            decode_z_signal => Z,
+            execute_z_signal => ZoutDE,
+            zeroFlag => flagReg(3),
+            decodeJMP => JMP,
+            MemRET => MEM_RET_int,
+            Final_PC => PC_int,
+            ResetFetchDecode => ResetFetchDecode_int,
+            ResetDecodeExecute => ResetDecodeExecute_int,
+            ResetExecuteMemory => ResetExecuteMemory_int,
+            ResetControl => ResetControl_int
+        );
+
         fetch1: FetchStage Port map ( clk => clk,
-        reset => rst,
-        Instruction => Instruction
+        reset =>  reset_signalFD,
+        Instruction => Instruction,
+        PCout => PCorigin
         );
 
         opcode<=Instruction(15 downto 11);
@@ -340,7 +404,7 @@ END component;
 
 
         controller1: controller port map(
-        Reset => rst,
+        Reset =>  ResetControl_int,
         opCode => opcode,
         RegDist => Regdst_inDE,
         RegWrite1 => RegWrite1_inDE,
@@ -357,7 +421,8 @@ END component;
         Z => Z,
         PROTECT => PROTECT_inDE,
         RET => RET,
-        FlagEnable => flag_enable_inDE
+        FlagEnable => flag_enable_inDE,
+        UC => UC_inDE
         );
 
 
@@ -389,7 +454,7 @@ END component;
 
         decodeExecute1: DecodeExecute port map(
             clk => clk,
-            rst => rst,
+            rst =>  ResetDecodeExecute_int,
             PC => PC_int,
             data1 => Data1_int,
             data2 => Data2_int,
@@ -412,6 +477,8 @@ END component;
         Freein =>FREE_inDE,
         UCin=>UC_inDE,
         PROTECTEDin=> PROTECT_inDE,
+        JMPin => JMP,
+        Zin => Z,
         outPC => PC_int,
         outData1 => outData1_int,
         outData2 => outData2_int,
@@ -433,12 +500,17 @@ END component;
         FlagEnableout=>Flag_enable_outDE,
         Freeout=>Free_outDE,
         UCout=>UCout_outDE,
-        PROTECTEDout=>PROTECTED_outDE
+        PROTECTEDout=>PROTECTED_outDE,
+        JMPoutp => JMPoutDE,
+        Zout => ZoutDE
         );
+
+        PCexec <= PC_int;
+
         alu_src_ex <= '0' & alu_src_outDE;
         execute1: Execute port map(
             clk => clk,
-            reset => rst,
+            reset =>  ResetExecuteMemory_int,
             A => signed(Data1_int),
             data2 => signed(Data2_int),
             imm => signed(outIMM_int),
@@ -495,18 +567,6 @@ END component;
         PROTECTEDout=>PROTECTED_outEX
         );
 
-    -- flush: FlushUnit port map(
-    --     clk => clk,
-    --     rst => rst,
-    --     WrongPredictionState => 
-    --     BranchPredict =>
-    --     decode_JMP =>
-    --     decode_z_sig =>
-    --     exec_z_sig =>
-    --     decode_UC_sig =>
-    --     MEM_RET =>
-    -- );
-
         memory1: MemoryStage port map(
             clk => clk,
             rst => rst,
@@ -522,6 +582,7 @@ END component;
             SPplus => SPplus_outEX,
             readData => finaloutmemoryout
         );
+
     wb: WriteBackStage port Map(
         clk=> clk,
         rst=> rst,
